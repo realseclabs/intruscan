@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Intruscan</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <style>
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #1a1b1e;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #4a5568;
+          border-radius: 4px;
+        }
+
+        .modal-overlay {
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+          transition: opacity 0.3s;
+        }
+
+        .fade-enter-from,
+        .fade-leave-to {
+          opacity: 0;
+        }
+      </style>
+    </head>
+
+    <body class="bg-gray-900 text-gray-100">
+      <div id="app"></div>
+      <script type="module" src="/src/main.js"></script>
+    </body>
+
+    </html>
