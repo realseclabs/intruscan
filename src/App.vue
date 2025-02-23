@@ -8,7 +8,7 @@
             <span class="font-bold text-xl">Intruscan</span>
           </div>
           <div class="flex space-x-4">
-            <button v-for="tab in ['proxy', 'spider', 'scanner']" :key="tab" @click="activeTab = tab"
+            <button v-for="tab in ['proxy', 'spider', 'scanner', 'intruder']" :key="tab" @click="activeTab = tab"
               :class="{'text-blue-500': activeTab === tab}"
               class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 capitalize">
               {{ tab }}
@@ -120,86 +120,137 @@
         </div>
       </div>
 
-     <!-- filepath: /c:/Users/Hp/Downloads/git_project_wide-canvas-m7epa227-61i97oea_ewfrz8/src/App.vue -->
-<!-- Spider Tab -->
-<div v-if="activeTab === 'spider'" class="space-y-6">
-  <!-- Spider Control Panel -->
-  <div class="bg-gray-800 p-6 rounded-lg">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-xl font-semibold">Spider Control</h2>
-      <button @click="startSpider" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
-        Start Spider
-      </button>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div>
-        <label class="block text-sm font-medium mb-2">Start URL</label>
-        <input type="text" v-model="spiderStartUrl" placeholder="https://example.com"
-          class="bg-gray-700 rounded px-3 py-2 w-full">
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-2">Max Depth</label>
-        <input type="number" v-model="spiderMaxDepth" placeholder="2"
-          class="bg-gray-700 rounded px-3 py-2 w-full">
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-2">Rate Limit (ms)</label>
-        <input type="number" v-model="spiderRateLimit" placeholder="1000"
-          class="bg-gray-700 rounded px-3 py-2 w-full">
-      </div>
-    </div>
-  </div>
+      <!-- Spider Tab -->
+      <div v-if="activeTab === 'spider'" class="space-y-6">
+        <!-- Spider Control Panel -->
+        <div class="bg-gray-800 p-6 rounded-lg">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold">Spider Control</h2>
+            <button @click="startSpider" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+              Start Spider
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Start URL</label>
+              <input type="text" v-model="spiderStartUrl" placeholder="https://example.com"
+                class="bg-gray-700 rounded px-3 py-2 w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Max Depth</label>
+              <input type="number" v-model="spiderMaxDepth" placeholder="2"
+                class="bg-gray-700 rounded px-3 py-2 w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Rate Limit (ms)</label>
+              <input type="number" v-model="spiderRateLimit" placeholder="1000"
+                class="bg-gray-700 rounded px-3 py-2 w-full">
+            </div>
+          </div>
+        </div>
 
-  <!-- Spider Results -->
-  <div class="bg-gray-800 p-6 rounded-lg">
-    <h3 class="text-lg font-semibold mb-4">Spider Results</h3>
-    <div class="h-96 overflow-y-auto custom-scrollbar">
-      <div v-for="(result, index) in spiderResults" :key="index"
-        class="border-b border-gray-700 p-4 hover:bg-gray-700 cursor-pointer">
-        <div class="font-mono text-sm mt-2 truncate">{{ result.url }}</div>
-        <div class="text-sm text-gray-400">{{ result.status }}</div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Scanner Tab -->
-<div v-if="activeTab === 'scanner'" class="space-y-6">
-      <!-- Scanner Control Panel -->
-      <div class="bg-gray-800 p-6 rounded-lg">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-semibold">Scanner Control</h2>
-          <button @click="startScanner" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
-            Start Scanner
-          </button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label class="block text-sm font-medium mb-2">Target URL</label>
-            <input type="text" v-model="scannerTargetUrl" placeholder="https://example.com"
-              class="bg-gray-700 rounded px-3 py-2 w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2">Scan Type</label>
-            <select v-model="scannerScanType" class="bg-gray-700 rounded px-3 py-2 w-full">
-              <option value="passive">Passive</option>
-              <option value="active">Active</option>
-              <option value="custom">Custom</option>
-            </select>
+        <!-- Spider Results -->
+        <div class="bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-semibold mb-4">Spider Results</h3>
+          <div class="h-96 overflow-y-auto custom-scrollbar">
+            <div v-for="(result, index) in spiderResults" :key="index"
+              class="border-b border-gray-700 p-4 hover:bg-gray-700 cursor-pointer">
+              <div class="font-mono text-sm mt-2 truncate">{{ result.url }}</div>
+              <div class="text-sm text-gray-400">{{ result.status }}</div>
+            </div>
           </div>
         </div>
       </div>
-      <!-- Scanner Results -->
-      <div class="bg-gray-800 p-6 rounded-lg">
-        <h3 class="text-lg font-semibold mb-4">Scanner Results</h3>
-        <div class="h-96 overflow-y-auto custom-scrollbar">
-          <div v-for="(result, index) in scannerResults" :key="index"
-            class="border-b border-gray-700 p-4 hover:bg-gray-700 cursor-pointer">
-            <div class="font-mono text-sm mt-2 truncate">{{ result.url }}</div>
-            <div class="text-sm text-gray-400">{{ result.issue }} - {{ result.severity }}</div>
+
+      <!-- Scanner Tab -->
+      <div v-if="activeTab === 'scanner'" class="space-y-6">
+        <!-- Scanner Control Panel -->
+        <div class="bg-gray-800 p-6 rounded-lg">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold">Scanner Control</h2>
+            <button @click="startScanner" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+              Start Scanner
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Target URL</label>
+              <input type="text" v-model="scannerTargetUrl" placeholder="https://example.com"
+                class="bg-gray-700 rounded px-3 py-2 w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Scan Type</label>
+              <select v-model="scannerScanType" class="bg-gray-700 rounded px-3 py-2 w-full">
+                <option value="passive">Passive</option>
+                <option value="active">Active</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Scanner Results -->
+        <div class="bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-semibold mb-4">Scanner Results</h3>
+          <div class="h-96 overflow-y-auto custom-scrollbar">
+            <div v-for="(result, index) in scannerResults" :key="index"
+              class="border-b border-gray-700 p-4 hover:bg-gray-700 cursor-pointer">
+              <div class="font-mono text-sm mt-2 truncate">{{ result.url }}</div>
+              <div class="text-sm text-gray-400">{{ result.issue }} - {{ result.severity }}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Intruder Tab -->
+      <div v-if="activeTab === 'intruder'" class="space-y-6">
+        <!-- Intruder Control Panel -->
+        <div class="bg-gray-800 p-6 rounded-lg">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold">Intruder Control</h2>
+            <button @click="startIntruder" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+              Start Intruder
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Target URL</label>
+              <input type="text" v-model="intruderTargetUrl" placeholder="https://example.com"
+                class="bg-gray-700 rounded px-3 py-2 w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Attack Mode</label>
+              <select v-model="intruderAttackMode" class="bg-gray-700 rounded px-3 py-2 w-full">
+                <option value="sniper">Sniper</option>
+                <option value="batteringRam">Battering Ram</option>
+                <option value="pitchfork">Pitchfork</option>
+                <option value="clusterBomb">Cluster Bomb</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Parameters</label>
+              <input type="text" v-model="intruderParameters" placeholder="param1,param2"
+                class="bg-gray-700 rounded px-3 py-2 w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Payloads</label>
+              <textarea v-model="intruderPayloads" rows="4" placeholder="payload1,payload2"
+                class="bg-gray-700 rounded px-3 py-2 w-full"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Intruder Results -->
+        <div class="bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-semibold mb-4">Intruder Results</h3>
+          <div class="h-96 overflow-y-auto custom-scrollbar">
+            <div v-for="(result, index) in intruderResults" :key="index"
+              class="border-b border-gray-700 p-4 hover:bg-gray-700 cursor-pointer">
+              <div class="font-mono text-sm mt-2 truncate">{{ result.url }}</div>
+              <div class="text-sm text-gray-400">{{ result.params }} - {{ result.status }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Request Editor Modal -->
       <div v-if="showRequestEditor" class="fixed inset-0 flex items-center justify-center z-50">
@@ -276,9 +327,14 @@ export default {
       spiderMaxDepth: 2,
       spiderRateLimit: 1000,
       spiderResults: [],
-      scannerTargetUrl: '', // Add this line
-      scannerScanType: 'passive', // Add this line
-      scannerResults: [] // Add this line
+      scannerTargetUrl: '',
+      scannerScanType: 'passive',
+      scannerResults: [],
+      intruderTargetUrl: '', // Add this line
+      intruderAttackMode: 'sniper', // Add this line
+      intruderParameters: '', // Add this line
+      intruderPayloads: '', // Add this line
+      intruderResults: [] // Add this line
     }
   },
   computed: {
@@ -291,143 +347,156 @@ export default {
     }
   },
   methods: {
-    toggleProxy() {
-      this.isProxyRunning = !this.isProxyRunning;
-      if (this.isProxyRunning) {
-        this.startProxy();
-      } else {
-        this.stopProxy();
-      }
-    },
-    toggleInterception() {
-      this.isInterceptionEnabled = !this.isInterceptionEnabled;
-    },
-    generateCert() {
-      this.isCertInstalled = true;
-    },
-    async startProxy() {
-      try {
-        await axios.post('http://localhost:8080/start');
-        this.isProxyRunning = true;
-        this.captureTraffic();
-      } catch (error) {
-        console.error('Failed to start proxy:', error);
-      }
-    },
-    async stopProxy() {
-      try {
-        await axios.post('http://localhost:8080/stop');
-        this.isProxyRunning = false;
-      } catch (error) {
-        console.error('Failed to stop proxy:', error);
-      }
-    },
-    async captureTraffic() {
-      if (!this.isProxyRunning) return;
-
-      // Simulate capturing network traffic
-      // In a real scenario, this would involve intercepting HTTP/HTTPS requests
-      // and responses using a proxy server
-
-      // Simulate a captured request
-      const methods = ['GET', 'POST', 'PUT', 'DELETE'];
-      const paths = ['/api/users', '/login', '/dashboard', '/api/products'];
-      const request = {
-        method: methods[Math.floor(Math.random() * methods.length)],
-        url: 'https://example.com' + paths[Math.floor(Math.random() * paths.length)],
-        headers: 'Content-Type: application/json',
-        body: '{"key": "value"}',
-        timestamp: new Date().toLocaleTimeString(),
-        status: 200,
-        contentType: 'application/json',
-        size: 1024
-      };
-
-      this.addRequest(request);
-
-      // Continue simulating traffic capture
-      setTimeout(() => {
-        this.captureTraffic();
-      }, 3000);
-    },
-    editRequest(req) {
-      this.selectedRequest = { ...req };
-      this.showRequestEditor = true;
-    },
-    dropRequest() {
-      const index = this.interceptedRequests.findIndex(r => r.timestamp === this.selectedRequest.timestamp);
-      if (index !== -1) {
-        this.interceptedRequests.splice(index, 1);
-      }
-      this.showRequestEditor = false;
-    },
-    forwardRequest() {
-      // Simulate forwarding the request to the server
-      console.log('Forwarding request:', this.selectedRequest);
-      // Here you would typically send the request using axios or another library
-      // and handle the response
-      axios({
-          method: this.selectedRequest.method,
-          url: this.selectedRequest.url,
-          headers: this.selectedRequest.headers,
-          data: this.selectedRequest.body,
-        })
-        .then(response => {
-          // Handle the response
-          console.log('Response:', response);
-          // Update the request with the response status
-          const index = this.interceptedRequests.findIndex(r => r.timestamp === this.selectedRequest.timestamp);
-          if (index !== -1) {
-            this.interceptedRequests[index].status = response.status;
-            this.interceptedRequests[index].responseHeaders = JSON.stringify(response.headers);
-            this.interceptedRequests[index].responseBody = JSON.stringify(response.data);
-          }
-        })
-        .catch(error => {
-          // Handle the error
-          console.error('Error:', error);
-          // Update the request with the error status
-          const index = this.interceptedRequests.findIndex(r => r.timestamp === this.selectedRequest.timestamp);
-          if (index !== -1) {
-            this.interceptedRequests[index].status = error.response ? error.response.status : 500;
-          }
-        });
-
-      this.showRequestEditor = false;
-    },
-    addRequest(request) {
-      this.interceptedRequests.unshift(request);
-      if (this.interceptedRequests.length > 100) {
-        this.interceptedRequests.pop();
-      }
-    },
-    clearRequests() {
-      this.interceptedRequests = [];
-    },
-    async startSpider() {
-      try {
-        const response = await axios.post('http://localhost:8080/spider', { 
-          url: this.spiderStartUrl, 
-          maxDepth: this.spiderMaxDepth,
-          rateLimit: this.spiderRateLimit 
-        });
-        this.spiderResults = response.data.results;
-      } catch (error) {
-        console.error('Failed to start spider:', error);
-      }
-    },
-    async startScanner() {
-      try {
-        const response = await axios.post('http://localhost:8080/scanner', { 
-          url: this.scannerTargetUrl, 
-          scanType: this.scannerScanType 
-        });
-        this.scannerResults = response.data.results;
-      } catch (error) {
-        console.error('Failed to start scanner:', error);
-      }
+  toggleProxy() {
+    this.isProxyRunning = !this.isProxyRunning;
+    if (this.isProxyRunning) {
+      this.startProxy();
+    } else {
+      this.stopProxy();
     }
   },
+  toggleInterception() {
+    this.isInterceptionEnabled = !this.isInterceptionEnabled;
+  },
+  generateCert() {
+    this.isCertInstalled = true;
+  },
+  async startProxy() {
+    try {
+      await axios.post('http://localhost:8080/start');
+      this.isProxyRunning = true;
+      this.captureTraffic();
+    } catch (error) {
+      console.error('Failed to start proxy:', error);
+    }
+  },
+  async stopProxy() {
+    try {
+      await axios.post('http://localhost:8080/stop');
+      this.isProxyRunning = false;
+    } catch (error) {
+      console.error('Failed to stop proxy:', error);
+    }
+  },
+  async captureTraffic() {
+    if (!this.isProxyRunning) return;
+
+    // Simulate capturing network traffic
+    // In a real scenario, this would involve intercepting HTTP/HTTPS requests
+    // and responses using a proxy server
+
+    // Simulate a captured request
+    const methods = ['GET', 'POST', 'PUT', 'DELETE'];
+    const paths = ['/api/users', '/login', '/dashboard', '/api/products'];
+    const request = {
+      method: methods[Math.floor(Math.random() * methods.length)],
+      url: 'https://example.com' + paths[Math.floor(Math.random() * paths.length)],
+      headers: 'Content-Type: application/json',
+      body: '{"key": "value"}',
+      timestamp: new Date().toLocaleTimeString(),
+      status: 200,
+      contentType: 'application/json',
+      size: 1024
+    };
+
+    this.addRequest(request);
+
+    // Continue simulating traffic capture
+    setTimeout(() => {
+      this.captureTraffic();
+    }, 3000);
+  },
+  editRequest(req) {
+    this.selectedRequest = { ...req };
+    this.showRequestEditor = true;
+  },
+  dropRequest() {
+    const index = this.interceptedRequests.findIndex(r => r.timestamp === this.selectedRequest.timestamp);
+    if (index !== -1) {
+      this.interceptedRequests.splice(index, 1);
+    }
+    this.showRequestEditor = false;
+  },
+  forwardRequest() {
+    // Simulate forwarding the request to the server
+    console.log('Forwarding request:', this.selectedRequest);
+    // Here you would typically send the request using axios or another library
+    // and handle the response
+    axios({
+        method: this.selectedRequest.method,
+        url: this.selectedRequest.url,
+        headers: this.selectedRequest.headers,
+        data: this.selectedRequest.body,
+      })
+      .then(response => {
+        // Handle the response
+        console.log('Response:', response);
+        // Update the request with the response status
+        const index = this.interceptedRequests.findIndex(r => r.timestamp === this.selectedRequest.timestamp);
+        if (index !== -1) {
+          this.interceptedRequests[index].status = response.status;
+          this.interceptedRequests[index].responseHeaders = JSON.stringify(response.headers);
+          this.interceptedRequests[index].responseBody = JSON.stringify(response.data);
+        }
+      })
+      .catch(error => {
+        // Handle the error
+        console.error('Error:', error);
+        // Update the request with the error status
+        const index = this.interceptedRequests.findIndex(r => r.timestamp === this.selectedRequest.timestamp);
+        if (index !== -1) {
+          this.interceptedRequests[index].status = error.response ? error.response.status : 500;
+        }
+      });
+
+    this.showRequestEditor = false;
+  },
+  addRequest(request) {
+    this.interceptedRequests.unshift(request);
+    if (this.interceptedRequests.length > 100) {
+      this.interceptedRequests.pop();
+    }
+  },
+  clearRequests() {
+    this.interceptedRequests = [];
+  },
+  async startSpider() {
+    try {
+      const response = await axios.post('http://localhost:8080/spider', { 
+        url: this.spiderStartUrl, 
+        maxDepth: this.spiderMaxDepth,
+        rateLimit: this.spiderRateLimit 
+      });
+      this.spiderResults = response.data.results;
+    } catch (error) {
+      console.error('Failed to start spider:', error);
+    }
+  },
+  async startScanner() {
+    try {
+      const response = await axios.post('http://localhost:8080/scanner', { 
+        url: this.scannerTargetUrl, 
+        scanType: this.scannerScanType 
+      });
+      this.scannerResults = response.data.results;
+    } catch (error) {
+      console.error('Failed to start scanner:', error);
+    }
+  },
+  async startIntruder() {
+    try {
+      const response = await axios.post('http://localhost:8080/intruder', { 
+        url: this.intruderTargetUrl, 
+        attackMode: this.intruderAttackMode,
+        parameters: this.intruderParameters.split(','),
+        payloads: this.intruderPayloads.split(',')
+      });
+      this.intruderResults = response.data.results;
+    } catch (error) {
+      console.error('Failed to start intruder:', error);
+    }
+  }
+},
   mounted() {
     const ws = new WebSocket('ws://localhost:8080');
     ws.onmessage = (event) => {
