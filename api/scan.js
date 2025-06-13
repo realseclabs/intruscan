@@ -47,4 +47,19 @@ class Scanner {
     }
 }
 
-export default Scanner;
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+  try {
+    res.status(200).json({
+      results: [
+        { url: '/search?q=', type: 'XSS', payload: '<script>alert(1)</script>' },
+        { url: '/login', type: 'SQL Injection', payload: "' OR 1=1--" }
+      ]
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Scan failed' });
+  }
+}

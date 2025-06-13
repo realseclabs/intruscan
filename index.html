@@ -289,7 +289,7 @@ document.getElementById('scope-form').addEventListener('submit', function(e) {
 });
 
 document.getElementById('clear-sitemap').addEventListener('click', async function() {
-  await fetch('http://localhost:4000/api/sitemap/clear', { method: 'POST' });
+  await fetch('/api/sitemap/clear', { method: 'POST' });
   fetchSiteMap();
 });
 
@@ -1029,7 +1029,7 @@ document.getElementById('intruder-attack').onclick = function() {
       const method = document.getElementById('test-method').value;
       const status = parseInt(document.getElementById('test-status').value, 10);
       if (url && method && status) {
-        await fetch('http://localhost:4000/api/sitemap/add', {
+        await fetch('/api/sitemap/add', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url, method, status })
