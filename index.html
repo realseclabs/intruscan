@@ -178,8 +178,8 @@
 </div>
 
 <script>
-const API_URL = 'http://localhost:4000/api/scope';
-const SITEMAP_API = 'http://localhost:4000/api/sitemap';
+const API_URL = '/api/scope';
+const SITEMAP_API = '/api/sitemap';
 
 let currentScope = { include: [], exclude: [] };
 let allLinks = [];
@@ -346,7 +346,7 @@ document.getElementById('crawler-form').addEventListener('submit', async functio
   e.preventDefault();
   const startUrl = document.getElementById('crawl-url').value.trim();
   if (startUrl) {
-    await fetch('http://localhost:4000/api/crawl', {
+    await fetch('/api/crawl', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ startUrl })
@@ -1051,7 +1051,7 @@ document.getElementById('intruder-attack').onclick = function() {
 <script>
 document.getElementById('scan-btn').addEventListener('click', async function() {
   document.getElementById('scan-results').innerHTML = 'Scanning...';
-  const res = await fetch('http://localhost:4000/api/scan', {
+  const res = await fetch('/api/scan', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ startUrl })
