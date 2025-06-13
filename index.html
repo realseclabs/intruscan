@@ -1,1220 +1,1076 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RealSec Labs - Building Security through Trust</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#FF6B00', // Orange from logo
-                        'secondary': '#1A1A1A', // Dark background
-                        'light-gray': '#808080',
-                    },
-                    fontFamily: {
-                        'sans': ['Roboto', 'sans-serif'],
-                        'heading': ['Poppins', 'sans-serif'],
-                    }
-                }
-            }
+  <meta charset="UTF-8">
+  <title>Intruscan - Web Vulnerability Scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts & Bootstrap Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#FF6B00',
+            'secondary': '#1A1A1A',
+            'light-gray': '#808080',
+            'card': '#232323',
+            'border': '#333',
+          },
+          fontFamily: {
+            'sans': ['Roboto', 'sans-serif'],
+            'heading': ['Poppins', 'sans-serif'],
+          }
         }
-    </script>
-    <style>
-        body {
-            background-color: #121212;
-            color: #f0f0f0;
-        }
-        .gradient-text {
-            background: linear-gradient(90deg, #FF6B00, #FF9D4D);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .glow {
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.5);
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 107, 0, 0.2);
-        }
-        .nav-link {
-            position: relative;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background-color: #FF6B00;
-            transition: width 0.3s;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        .proxy-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .proxy-container::-webkit-scrollbar-track {
-            background: #1e1e1e;
-        }
-        .proxy-container::-webkit-scrollbar-thumb {
-            background: #3d3d3d;
-            border-radius: 4px;
-        }
-        .proxy-container::-webkit-scrollbar-thumb:hover {
-            background: #FF6B00;
-        }
-        .code-editor {
-            font-family: 'Consolas', 'Monaco', monospace;
-        }
-        .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top-color: #FF6B00; /* Primary color */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .tool-card {
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            height: 100%; /* Ensure cards have consistent height */
-            justify-content: space-between;
-        }
-        .tool-card:hover {
-            background-color: #2a2a2a;
-        }
-        .modal {
-            animation: fadeIn 0.3s;
-        }
-        .modal-content {
-            animation: slideIn 0.3s;
-            background-color: #1e1e1e;
-            color: #f0f0f0;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        select {
-            background-image: none; /* Remove default dropdown arrow */
-            cursor: pointer; /* Change cursor to pointer for better UX */
-        }
-
-        select:focus {
-            outline: none; /* Remove default focus outline */
-        }
-
-        section {
-            scroll-margin-top: 80px; /* Adjust this value to match your header height */
-        }
-
-        #open-source-projects {
-            margin-top: 5rem; /* Adjust this value as needed */
-            scroll-margin-top: 120px; /* Matches the offset in JavaScript */
-        }
-        .filter-orange {
-            filter: brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(1000%) hue-rotate(0deg) brightness(100%) contrast(100%);
-        }
-        .iframe-container {
-            height: 100%;
-            overflow: hidden; /* Hide scrollbar by default */
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .iframe-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-
-        .iframe-container:hover {
-            overflow: auto; /* Show scrollbar on hover */
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;     /* Firefox */
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;             /* Chrome, Safari, Opera */
-        }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #FF6B00, #FF9D4D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(255, 107, 0, 0.2);
+    }
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #FF6B00;
+      transition: width 0.3s;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    /* .section-title { Replaced @apply with Tailwind classes in HTML } */
+    /* .section-card { Replaced @apply with Tailwind classes in HTML } */
+    /* Removed empty ruleset for .section-table th, .section-table td */
+    /* Removed empty ruleset for .section-table */
+    .status-high { color: #ff5370; font-weight: bold; }
+    .status-medium { color: #ffcb6b; font-weight: bold; }
+    .status-low { color: #43d675; font-weight: bold; }
+    textarea, input, select {
+      background: #232323 !important;
+      color: #f0f0f0 !important;
+      border: 1px solid #333 !important;
+    }
+    textarea:focus, input:focus, select:focus {
+      border-color: #FF6B00 !important;
+      outline: none !important;
+    }
+    button {
+      transition: background 0.2s, color 0.2s;
+    }
+    button:focus {
+      outline: 2px solid #FF6B00;
+      outline-offset: 2px;
+    }
+  </style>
 </head>
+<body class="font-sans min-h-screen">
 
-<body class="min-h-screen font-sans">
-    <!-- Navbar -->
-    <header class="fixed w-full bg-secondary/90 backdrop-blur-sm z-50">
-        <nav class="container mx-auto px-4 py-4 flex flex-wrap items-center justify-between">
-            <div class="flex items-center">
-                <!-- Add Logo -->
-                <img src="./assets/images/RealSecLabs-Logo-nobg.png" alt="RealSec Labs Logo" class="h-10 mr-3" onclick="location.href='#home';">
-                <a href="#" class="flex items-center">
-                    <div class="font-heading font-bold text-xl md:text-2xl">
-                    </div>
-                </a>
-            </div>
-            
-            <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
-                <i class="bi bi-list text-2xl"></i>
-            </button>
-            
-            <div id="mobile-menu" class="hidden md:flex w-full md:w-auto md:items-center">
-                <ul class="flex flex-col md:flex-row md:space-x-8 mt-4 md:mt-0 font-medium">
-                    <li><a href="https://blog.realseclabs.com/" class="nav-link block py-2 text-white hover:text-primary">Blog</a></li>
-                    <li><a href="https://collab.realseclabs.com/" class="nav-link block py-2 text-white hover:text-primary">Collaborate</a></li>
-
-                    <li><a href="#home" class="nav-link block py-2 text-white hover:text-primary">Home</a></li>
-                    <li><a href="#blue-teaming" class="nav-link block py-2 text-white hover:text-primary">Defensive Security</a></li>
-                    <li><a href="#portfolio" class="nav-link block py-2 text-white hover:text-primary">Portfolio</a></li>
-                    <li><a href="#certifications" class="nav-link block py-2 text-white hover:text-primary">Certifications</a></li>
-                    <li><a href="#linkedin" class="nav-link block py-2 text-white hover:text-primary">Linkedin</a></li>
-                    
-                </ul>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="home" class="pt-28 md:pt-32 pb-10 md:pb-16 px-4">
-        <div class="container mx-auto">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-4 leading-tight">
-                        <span class="gradient-text">Building Security</span> 
-                        <br>through Trust
-                    </h1>
-                    
-                    <!-- Name and Qualification -->
-                    <div class="mt-6 text-left">
-                        <h2 class="text-2xl md:text-3xl font-bold text-primary animate-pulse">
-                            Glan Loyan Dsouza
-                        </h2>
-                        <p class="text-lg md:text-xl text-gray-300 italic mt-2">
-                            Red & Blue Teaming | Offensive & Defensive Security Expert | CEH Certified
-                        </p>
-                    </div>
-
-                    <p class="text-xl mb-8 text-gray-300 mt-6">
-                        Turning passion into protection — delivering real-world cybersecurity solutions that make impact.
-                    </p>
-                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <a href="#open-source-projects" class="bg-primary hover:bg-orange-500 text-white py-3 px-8 rounded-md font-medium transition-all glow text-center">
-                            Explore Tools & Projects
-                        </a>
-                        <a href="#" onclick="showResumeModal()" class="border-2 border-primary text-white hover:bg-primary/20 py-3 px-8 rounded-md font-medium transition-all text-center">
-                            Get My Resume
-                        </a>
-                    </div>
-                </div>
-                <div class="md:w-1/2 flex justify-center">
-                    <div class="relative">
-                        <div class="w-64 h-64 md:w-80 md:h-80 bg-primary/20 rounded-full absolute -top-5 -right-5 animate-pulse"></div>
-                        <div class="w-64 h-64 md:w-80 md:h-80 bg-primary/20 rounded-full absolute -bottom-5 -left-5 animate-pulse" style="animation-delay: 1s"></div>
-                        <div class="relative bg-secondary p-2 rounded-xl border border-gray-700">
-                            <img src="https://images.unsplash.com/photo-1545987796-200677ee1011?q=80&w=3540&auto=format&fit=crop" 
-                                 alt="Cybersecurity Visualization" 
-                                 class="w-full h-auto rounded-lg max-w-lg" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Us Section -->
-    <section id="blue teaming" class="py-16 px-4 bg-[#191919]">
-        <div class="container mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4 flex items-center justify-center">
-                    <i class="bi bi-shield-check text-primary mr-3"></i> <!-- Updated Icon -->
-                    My <span class="text-primary ml-2">Blue Teaming Journey</span>
-                </h2>
-                <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
-                    From simulating real-world incidents on Let'sDefend to analyzing threats like a SOC Analyst in action — my journey into blue teaming is a blend of hands-on detection, investigation, and defense. Every log, every alert, is a step toward mastering the art of cyber resilience.
-                </p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Card 1: What I Bring to the Blue Team Table -->
-                <div class="bg-secondary p-6 rounded-xl border border-gray-700 transition-all duration-300 card-hover">
-                    <div class="flex items-center mb-4">
-                        <i class="bi bi-shield-check text-primary text-4xl mr-3"></i>
-                        <h3 class="text-xl font-bold">What I Bring to the Blue Team Table</h3>
-                    </div>
-                    <p class="text-gray-300">
-                        From real-time alert triage to incident analysis, I bring hands-on experience in SOC workflows. My skillset includes working with SIEM tools, conducting log analysis, performing threat intelligence correlation, and applying MITRE ATT&CK for structured defense. Proficient in identifying, investigating, and responding to cyber threats with precision.
-                    </p>
-                </div>
-
-                <!-- Card 2: Blue Teaming Works -->
-                <div class="bg-secondary p-6 rounded-xl border border-gray-700 transition-all duration-300 card-hover">
-                    <div class="flex items-center mb-4">
-                        <i class="bi bi-lightbulb text-primary text-4xl mr-3"></i>
-                        <h3 class="text-xl font-bold">Blue Teaming Works</h3>
-                    </div>
-                    <p class="text-gray-300">
-                        SOC monitoring, incident analysis, log reviews, and threat hunting — here’s a showcase of the projects and client engagements where I’ve protected systems and prevented breaches.
-                    </p>
-                </div>
-
-                <!-- Card 3: Let'sDefend Profile -->
-                <div class="bg-secondary p-6 rounded-xl border border-gray-700 transition-all duration-300 card-hover">
-                    <div class="flex items-center mb-4">
-                        <img src="https://app.letsdefend.io/_next/image?url=https%3A%2F%2Fapp-ld-img.s3.us-east-2.amazonaws.com%2Fcommon%2Fld_logo_v2.png&w=256&q=75" 
-                             alt="Let'sDefend Logo" 
-                             class="w-10 h-10 mr-3 filter-orange">
-                        <h3 class="text-xl font-bold">LetsDefend Profile</h3>
-                    </div>
-                    <p class="text-gray-300">
-                        Hands-on experience with real-time alerts, incident simulations, and blue team scenarios. My Let'sDefend public profile highlights the cases I’ve resolved and skills I’ve earned along the way.
-                    </p>
-                    <div class="mt-4">
-                        <a href="https://app.letsdefend.io/user/glandsouza" target="_blank" class="text-primary hover:underline inline-flex items-center">
-                            View My Let'sDefend Profile <i class="bi bi-box-arrow-up-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="py-16 px-4">
-        <div class="container mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
-                    What I’ve Built to <span class="text-primary">Break and Defend</span>
-                </h2>
-                <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
-                    From offensive testing to defensive operations—here’s a look at the solutions, tools, and services I’ve built to secure the digital world.
-                </p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Card 5: Bugcrowd Profile -->
-                <div class="bg-secondary p-6 rounded-xl border border-gray-700 transition-all duration-300 card-hover flex flex-col items-center text-center h-full">
-                    <img src="https://www.bugcrowd.com/wp-content/uploads/2023/08/Bugcrowd-Logo-Wordmark-5.svg" alt="Bugcrowd Profile" class="w-24 h-24 mb-4 filter-orange">
-                    <h3 class="text-xl font-bold mb-2">Bugcrowd Profile</h3>
-                    <p class="text-gray-300">
-                        Dive into my real-world vulnerability discoveries and security contributions on Bugcrowd, where collaboration meets cutting-edge cybersecurity challenges.                    </p>
-                    <div class="mt-4">
-                        <a href="https://bugcrowd.com/glandsouza" target="_blank" class="text-primary hover:underline inline-flex items-center">
-                            View My Bugcrowd Profile <i class="bi bi-box-arrow-up-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- Card 4: HackerOne Profile -->
-                <div class="bg-secondary p-6 rounded-xl border border-gray-700 transition-all duration-300 card-hover flex flex-col items-center text-center h-full">
-                    <img src="https://www.hackerone.com/themes/custom/hackerone/logo.svg" alt="HackerOne Profile" class="w-24 h-24 mb-4 filter-orange">
-                    <h3 class="text-xl font-bold mb-2">HackerOne Profile</h3>
-                    <p class="text-gray-300">
-                        Uncover the critical vulnerabilities I’ve identified on HackerOne, helping global organizations strengthen their security posture through responsible disclosure.                    </p>
-                    <div class="mt-4">
-                        <a href="https://hackerone.com/glanloyandsouza" target="_blank" class="text-primary hover:underline inline-flex items-center">
-                            View My HackerOne Profile <i class="bi bi-box-arrow-up-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- Card 5: LetsDefend Profile -->
-                <div class="bg-secondary p-6 rounded-xl border border-gray-700 transition-all duration-300 card-hover flex flex-col items-center text-center h-full">
-                    <br>
-                    <img src="https://premium-storefronts.s3.amazonaws.com/storefronts/letsdefend/assets/logo.png" alt="letsdefend Profile" class="w-22 h-9 mb-4 filter-orange">
-                    <br>
-                    <h3 class="text-xl font-bold mb-2">LetsDefend SOC Analyst</h3>
-                    <p class="text-gray-300">
-                        Track my hands-on SOC analyst journey at LetsDefend — mastering real-world incident detection, response, and continuous threat hunting.                    </p>
-                    <div class="mt-4">
-                        <a href="https://app.letsdefend.io/user/glandsouza" target="_blank" class="text-primary hover:underline inline-flex items-center">
-                            View My LetsDefend Profile <i class="bi bi-box-arrow-up-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- Card 2 -->
-                <!-- Card 5: LetsDefend Profile -->
-                <div class="bg-secondary p-6 rounded-xl border border-gray-700 transition-all duration-300 card-hover flex flex-col items-center text-center h-full">
-                    <br>
-                    <img src="https://owasp.org/assets/images/logo.png" alt="letsdefend Profile" class="w-22 h-9 mb-4 filter-orange">
-                    <br>
-                    <h3 class="text-xl font-bold mb-2">OWASP Yenepoya Chapter Secretary</h3>
-                    <p class="text-gray-300">
-                        Helping students and security enthusiasts dive into the world of AppSec through events, workshops, and real talk on staying secure.                   </p>
-                    <div class="mt-4">
-                        <a href="https://owasp.org/www-chapter-yenepoya-institute/" target="_blank" class="text-primary hover:underline inline-flex items-center">
-                            Visit chapter page <i class="bi bi-box-arrow-up-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- Card 3 -->
-                
-               
-            </div>
-        </div>
-    </section>
-
-    <!-- Certifications Section (Replacing Our Tools Section) -->
-<section id="certifications" class="py-16 px-4 bg-[#191919]">
-    <div class="container mx-auto">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">My <span class="text-primary">Certifications</span></h2>
-            <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-            <p class="text-lg text-gray-300 max-w-3xl mx-auto">
-                Showcasing my achievements and expertise in cybersecurity through globally recognized certifications.
-            </p>
-        </div>
-        
-        <!-- Certifications Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Certification 1 -->
-
-            <div class="bg-secondary p-6 rounded-xl border border-gray-700 flex flex-col items-center text-center transition-all duration-300 card-hover">
-                <img src="./assets/images/CEH.png" alt="CEH Certification" class="w-16 h-14 mb-4 filter-orange">
-                <h3 class="text-xl font-bold mb-2">Certified Ethical Hacker (CEH)</h3>
-                <p class="text-gray-300">
-                    Proficient in uncovering security flaws and fortifying systems against cyber threats using industry-standard ethical hacking methodologies.                </p>
-                <a href="https://aspen.eccouncil.org/VerifyBadge?type=certification&a=PL+QS1EpNPlfkh1/2uWMMawAsI7NTDo8Ih7Fr+n1mU4=" target="_blank" class="text-primary hover:underline mt-4">
-                    View Credentials
-                </a>
-            </div>
-            
-            <!-- Certification 2 -->
-            <div class="bg-secondary p-6 rounded-xl border border-gray-700 flex flex-col items-center text-center transition-all duration-300 card-hover">
-                <br>
-                <img src="https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png" alt="Microsoft Azure Certification" class="w-24 h-7 mb-4 filter-orange">
-                
-                <h3 class="text-xl font-bold mb-2">Microsoft Azure: Identity and Access Management</h3>
-                <p class="text-gray-300">
-                    Demonstrates mastery in securing cloud identities and enforcing access controls within Microsoft Azure environments, ensuring robust enterprise-grade security.
-
-                </p>
-                <a href="https://www.linkedin.com/learning/certificates/f8d056dd48c1ec3f1b7f2467a4d684fd449bce322a3eba6fb29b2d6be6c82f57?trk=share_certificate" target="_blank" class="text-primary hover:underline mt-4">
-                    View Credentials
-                </a>
-            </div>
-            
-            <!-- Certification 3 -->
-            <div class="bg-secondary p-6 rounded-xl border border-gray-700 flex flex-col items-center text-center transition-all duration-300 card-hover">
-                <img src="https://app.letsdefend.io/_next/image?url=https%3A%2F%2Fapp-ld-img.s3.us-east-2.amazonaws.com%2Fcommon%2Fld_logo_v2.png&w=256&q=75" alt="LetsDefend SOC Analyst" class="w-16 h-16 mb-4 filter-orange">
-                <h3 class="text-xl font-bold mb-2">LetsDefend SOC Analyst</h3>
-                <p class="text-gray-300 mb-4">
-                    Proven expertise in real-time threat detection, incident response, and security monitoring within a simulated SOC environment.                </p>
-                <!-- Spinner Loader -->
-                <div class="mt-auto flex justify-center">
-                    <div class="loading-spinner w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-                </div>
-            </div>
-
-            <!-- Certification 4 (Spinner Loader) -->
-            <div class="bg-secondary p-6 rounded-xl border border-gray-700 flex flex-col items-center text-center transition-all duration-300 card-hover">
-                <img src="https://cybersapiens.com.au/wp-content/uploads/2022/03/cybersapiens-logo-menu.png" alt="Microsoft Azure Certification" class="w-24 h-24 mb-4 filter-orange">
-                <h3 class="text-xl font-bold mb-2">Cyber Security And Threat Hunting </h3>
-                <p class="text-gray-300">
-                    Specialized in proactive threat identification, attack surface analysis, and adversary hunting to strengthen organizational security postures.                </p>
-                <a href="https://drive.google.com/file/d/1qtE_parRJCAsJJArHAN7kcDr0QGgwAzU/view?usp=sharing" target="_blank" class="text-primary hover:underline mt-4">
-                    View Credentials
-                </a>
-            </div>
-
-            <!-- Certification 5 (Spinner Loader) -->
-            <!-- Certification 4 (Spinner Loader) -->
-            <div class="bg-secondary p-6 rounded-xl border border-gray-700 flex flex-col items-center text-center transition-all duration-300 card-hover">
-                <img src="https://cybersapiens.com.au/wp-content/uploads/2022/03/cybersapiens-logo-menu.png" alt="Microsoft Azure Certification" class="w-24 h-24 mb-4 filter-orange">
-                <h3 class="text-xl font-bold mb-2">Certified Ethical Hacker</h3>
-                <p class="text-gray-300">
-                    Equips professionals with offensive and defensive cybersecurity techniques to ethically assess, exploit, and secure digital infrastructures.                </p>
-                <a href="https://drive.google.com/file/d/1k8QrdVD0vggSnUlCAc1zjcSF4Z89jMBD/view?usp=sharing" target="_blank" class="text-primary hover:underline mt-4">
-                    View Credentials
-                </a>
-            </div>
-    </div>
-</section>
-
-<!-- Open Source Projects Section -->
-<section id="open-source-projects" class="py-16 px-4 bg-[#191919]">
-    <div class="container mx-auto">
-        <div class="flex flex-col items-center mb-12">
-  <div class="flex items-center justify-center gap-6 mb-4 flex-wrap">
-    <h2 class="text-3xl md:text-4xl font-heading font-bold flex items-center">
-      <i class="bi bi-github text-primary mr-3"></i> Open Source Projects
-    </h2>
-    <a href="https://tools.realseclabs.com" target="_blank"
-       class="group relative inline-flex items-center px-8 py-3 bg-gradient-to-r from-primary to-orange-500 text-white font-bold rounded-full shadow-xl border-4 border-transparent hover:border-orange-400 hover:from-orange-500 hover:to-primary transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/50 text-lg animate-pulse hover:animate-bounce"
-       style="box-shadow: 0 0 24px 4px #ff6b00, 0 2px 8px rgba(0,0,0,0.15);">
-      <span class="mr-2 text-2xl">🛠️</span>
-      Explore Tools
-      <span class="absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <i class="bi bi-arrow-right"></i>
-      </span>
-    </a>
-  </div>
-  <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-  <p class="text-lg text-gray-300 max-w-3xl mx-auto">
-    Explore my contributions to the open-source community, showcasing tools and projects designed to enhance cybersecurity.
-  </p>
-</div>
-        <div id="github-repos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Spinner Loader -->
-            <div id="repo-loader" class="flex justify-center items-center col-span-full">
-                <div class="loading-spinner w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-    <!-- Get My Resume Modal -->
-    <div id="resumeModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#1e1e1e] rounded-xl max-w-md w-full modal-content">
-            <div class="flex justify-end p-4">
-                <button onclick="hideResumeModal()" class="text-gray-400 hover:text-white">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </div>
-            <div class="p-6 text-center">
-                <!-- Main Title -->
-                <h2 class="text-2xl font-bold mb-4">Let's Build Secure Futures Together</h2>
-                <!-- Subtitle -->
-                <p class="text-gray-300 mb-6">
-                    Whether you're hiring, collaborating, or exploring — my resume is just a click away.
-                </p>
-                <!-- Dropdown for Resume Options -->
-                <div class="relative mb-6">
-                    <label for="resume-type" class="block text-sm font-medium mb-2 text-gray-300">Domain Hiring For</label>
-                    <div class="relative">
-                        <select id="resume-type" class="w-full bg-[#232323] border border-gray-700 rounded-md py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary appearance-none">
-                            <option value="" disabled selected>Select a domain</option>
-                            <option value="blue-team">Blue Teaming (Defensive Security)</option>
-                            <option value="red-team">Red Teaming (Offensive Security)</option>
-                            <option value="purple-team">Purple Teaming (Offensive + Defensive Security)</option>
-                        </select>
-                        <!-- Custom Dropdown Arrow -->
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i class="bi bi-chevron-down text-gray-400"></i>
-                        </div>
-                    </div>
-                </div>
-                <!-- Download Button -->
-                <button class="w-full bg-primary hover:bg-orange-600 text-white py-3 px-6 rounded-md font-medium transition-all" onclick="handleResumeDownload()">
-                    Get Resume
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Get in Touch Modal -->
-    <div id="contactModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#1e1e1e] rounded-xl max-w-md w-full modal-content">
-            <div class="flex justify-between items-center border-b border-gray-700 p-4">
-                <h3 class="text-xl font-bold">Get in Touch</h3>
-                <button onclick="hideContactModal()" class="text-gray-400 hover:text-white">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </div>
-            
-            <div class="p-6">
-                <form id="contactModalForm" class="space-y-4">
-                    <div>
-                        <label for="modal-name" class="block text-sm font-medium mb-1">Full Name</label>
-                        <input type="text" id="modal-name" name="name" class="w-full bg-secondary border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-primary">
-                    </div>
-                    
-                    <div>
-                        <label for="modal-email" class="block text-sm font-medium mb-1">Email Address</label>
-                        <input type="email" id="modal-email" name="email" class="w-full bg-secondary border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-primary">
-                    </div>
-                    
-                    <div>
-                        <label for="hiring-domain" class="block text-sm font-medium mb-1">Domain Hiring For</label>
-                        <select id="hiring-domain" name="domain" class="w-full bg-secondary border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-primary">
-                            <option value="">Select a domain</option>
-                            <option value="blue-team">Blue Teaming (Defensive Security)</option>
-                            <option value="red-team">Red Teaming (Offensive Security)</option>
-                            <option value="purple-team">Purple Teaming (Offensive & Defensive Security)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="pt-4">
-                        <button type="submit" class="w-full bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium transition-all">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Blog Section -->
-    <!-- LinkedIn Presence Section (Normal Slider Displaying 3 Cards at a Time) -->
-<section id="linkedin" class="py-16 px-4">
-  <div class="container mx-auto">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
-        <span class="text-primary">LinkedIn</span> Presence
-      </h2>
-      <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-      <p class="text-lg text-gray-300 max-w-3xl mx-auto">
-        Let’s Connect & Collaborate in Cybersecurity
-      </p>
-    </div>
-    
-    <div class="relative">
-      <!-- Slider container; added px-8 for horizontal padding -->
-      <div id="linkedin-slider" class="flex space-x-8 overflow-hidden scrollbar-hide px-8">
-        <!-- Card 1: Embedded LinkedIn Post -->
-        <div class="bg-secondary rounded-xl border-2 border-gray-700 shadow-md flex-none w-80 transition-all duration-300 card-hover">
-            <div class="iframe-container w-full h-full">
-                <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7317950346784382978?collapsed=1" height="350" width="100%" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
-            </div>
-          </div>
-        <!-- Card 1: Embedded LinkedIn Post -->
-        <div class="bg-secondary rounded-xl border-2 border-gray-700 shadow-md flex-none w-80 transition-all duration-300 card-hover">
-          <div class="iframe-container w-full h-full">
-            <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7313167481118855168?collapsed=1" 
-                    height="350" width="100%" frameborder="0" allowfullscreen=""
-                    title="Embedded post"></iframe>
-          </div>
-        </div>
-        
-        <!-- Card 2: Embedded LinkedIn Post -->
-        <div class="bg-secondary rounded-xl border-2 border-gray-700 shadow-md flex-none w-80 transition-all duration-300 card-hover">
-          <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7233131420234178560?collapsed=1" 
-                  height="350" width="100%" frameborder="0" allowfullscreen=""
-                  title="Embedded post"></iframe>
-        </div>
-        
-        <!-- Card 3: Embedded LinkedIn Post -->
-        <div class="bg-secondary rounded-xl border-2 border-gray-700 shadow-md flex-none w-80 transition-all duration-300 card-hover">
-          <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7092454064566779904?collapsed=1" 
-                  height="350" width="100%" frameborder="0" allowfullscreen=""
-                  title="Embedded post"></iframe>
-        </div>
-        
-        <!-- Card 4: Embedded LinkedIn Post -->
-        <div class="bg-secondary rounded-xl border-2 border-gray-700 shadow-md flex-none w-80 transition-all duration-300 card-hover">
-          <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7092528344910430208?collapsed=1" 
-                  height="350" width="100%" frameborder="0" allowfullscreen=""
-                  title="Embedded post"></iframe>
-        </div>
-        
-        <!-- Card 5: Embedded LinkedIn Post -->
-        <div class="bg-secondary rounded-xl border-2 border-gray-700 shadow-md flex-none w-80 transition-all duration-300 card-hover">
-          <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7038402666753925120?collapsed=1" 
-                  height="350" width="100%" frameborder="0" allowfullscreen=""
-                  title="Embedded post"></iframe>
-        </div>
-        
-        <!-- Add more cards as needed -->
+  <!-- Navbar -->
+  <header class="fixed w-full bg-secondary/90 backdrop-blur-sm z-50 border-b border-border">
+    <nav class="container mx-auto px-4 py-4 flex flex-wrap items-center justify-between">
+      <div class="flex items-center">
+        <img src="./assets/images/RealSecLabs-Logo-nobg.png" alt="RealSec Labs Logo" class="h-10 mr-3">
+        <span class="font-heading font-bold text-2xl md:text-3xl gradient-text tracking-wide select-none">
+        IntruScan <sup class="align-super text-xs gradient-text">&copy;</sup>
+    </span>
       </div>
-      
-      <!-- Slider Controls -->
-      <button id="prev-btn" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-primary/50 p-2 rounded-full">
-        <i class="bi bi-chevron-left text-white"></i>
-      </button>
-      <button id="next-btn" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-primary/50 p-2 rounded-full">
-        <i class="bi bi-chevron-right text-white"></i>
-      </button>
+      <ul class="flex flex-row space-x-6 font-medium">
+        <li><a href="#scope" class="nav-link text-white hover:text-primary">Scope</a></li>
+        <li><a href="#sitemap" class="nav-link text-white hover:text-primary">Site Map</a></li>
+        <li><a href="#scanner" class="nav-link text-white hover:text-primary">Scanner</a></li>
+        <li><a href="#repeater" class="nav-link text-white hover:text-primary">Repeater</a></li>
+        <li><a href="#intruder" class="nav-link text-white hover:text-primary">Intruder</a></li>
+        <li><a href="#reports" class="nav-link text-white hover:text-primary">Reports</a></li>
+        <li><a href="#logs" class="nav-link text-white hover:text-primary">Logs</a></li>
+        <li><a href="https://realseclabs.com" class="nav-link text-white hover:text-primary" style="color:#FF6B00; text-decoration:none; font-weight:600;">RealSec Labs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container mx-auto pt-32 pb-16 px-4">
+    <!-- 1. Target Definition -->
+    <!-- Scope Manager Section (with working add/remove and auto-refresh) -->
+<section id="scope" class="mb-12">
+  <h2 class="section-title">🧭 Scope Manager</h2>
+  <div class="grid md:grid-cols-2 gap-8">
+    <div class="section-card">
+      <form id="scope-form">
+        <div class="mb-4">
+          <label class="block text-light-gray mb-1" for="scope-url">Domain/URL</label>
+          <input id="scope-url" type="text" class="w-full rounded-md p-2" placeholder="e.g. https://example.com" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-light-gray mb-1">Type</label>
+          <select id="scope-type" class="w-full rounded-md p-2">
+            <option value="include">Include</option>
+            <option value="exclude">Exclude</option>
+          </select>
+        </div>
+        <button type="submit" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium mt-2">Add to Scope</button>
+      </form>
     </div>
-  <!-- Option to Visit LinkedIn Profile -->
-  <div class="text-center mt-8">
-    <a href="https://www.linkedin.com/in/glanloyandsouza" target="_blank" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium transition-all">
-      Visit My LinkedIn Profile
-    </a>
+    <div class="section-card">
+      <h3 class="text-lg font-bold mb-2 text-primary">Current Scope</h3>
+      <div class="flex gap-6">
+        <div>
+          <h4 class="font-bold text-white mb-1">Include</h4>
+          <ul id="scope-include-list" class="list-disc pl-5 text-light-gray"></ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-white mb-1">Exclude</h4>
+          <ul id="scope-exclude-list" class="list-disc pl-5 text-light-gray"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Site Map Section -->
+<section id="sitemap" class="mb-12">
+  <h2 class="section-title">🗂️ Site Map</h2>
+  <div class="section-card overflow-x-auto">
+    <table class="site-map w-full">
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Method</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="sitemap-table-body">
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<button id="clear-sitemap" class="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">
+  Clear Site Map
+</button>
+
+<div id="loader" class="mb-4 text-primary font-bold" style="display:none;">
+  Crawling... <span id="loader-count">0</span> links found.
+</div>
+
+<div id="simulate-loader" style="display:none;flex-direction:column;justify-content:center;align-items:center;position:absolute;left:0;right:0;top:0;bottom:0;z-index:10;background:rgba(30,30,30,0.85);">
+  <div style="border: 4px solid #444; border-top: 4px solid #ff9800; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom:16px;"></div>
+  <span style="color:#ff9800;font-weight:bold;font-size:1.1em;">Scanning...</span>
+</div>
+
+<script>
+const API_URL = 'http://localhost:4000/api/scope';
+const SITEMAP_API = 'http://localhost:4000/api/sitemap';
+
+let currentScope = { include: [], exclude: [] };
+let allLinks = [];
+
+// Scope filter logic
+function isInScope(link) {
+  const normLink = link.replace(/\/$/, '').toLowerCase();
+  // If include is empty, show all links except those in exclude
+  if (currentScope.include.length === 0) {
+    return !currentScope.exclude.some(domain => {
+      const normDomain = domain.replace(/\/$/, '').toLowerCase();
+      return normLink === normDomain || normLink.startsWith(normDomain + '/');
+    });
+  }
+  // If include is not empty, show only those in include and not in exclude
+  return currentScope.include.some(domain => {
+    const normDomain = domain.replace(/\/$/, '').toLowerCase();
+    return normLink === normDomain || normLink.startsWith(normDomain + '/');
+  }) && !currentScope.exclude.some(domain => {
+    const normDomain = domain.replace(/\/$/, '').toLowerCase();
+    return normLink === normDomain || normLink.startsWith(normDomain + '/');
+  });
+}
+
+async function fetchScope() {
+  const res = await fetch(API_URL);
+  currentScope = await res.json();
+  renderScope(currentScope);
+  renderSiteMap(allLinks); // re-render with new scope
+}
+
+async function fetchSiteMap() {
+  const res = await fetch(SITEMAP_API);
+  allLinks = await res.json();
+  renderSiteMap(allLinks);
+}
+
+function renderScope(scope) {
+  const includeList = document.getElementById('scope-include-list');
+  const excludeList = document.getElementById('scope-exclude-list');
+  includeList.innerHTML = '';
+  excludeList.innerHTML = '';
+  scope.include.forEach(url => {
+    const li = document.createElement('li');
+    li.textContent = url;
+    const btn = document.createElement('button');
+    btn.textContent = '✕';
+    btn.className = 'ml-2 text-red-400 hover:text-red-600 text-xs';
+    btn.onclick = () => removeScope('include', url);
+    li.appendChild(btn);
+    includeList.appendChild(li);
+  });
+  scope.exclude.forEach(url => {
+    const li = document.createElement('li');
+    li.textContent = url;
+    const btn = document.createElement('button');
+    btn.textContent = '✕';
+    btn.className = 'ml-2 text-red-400 hover:text-red-600 text-xs';
+    btn.onclick = () => removeScope('exclude', url);
+    li.appendChild(btn);
+    excludeList.appendChild(li);
+  });
+}
+
+function renderSiteMap(siteMap) {
+  const tbody = document.getElementById('sitemap-table-body');
+  tbody.innerHTML = '';
+  siteMap.filter(entry => isInScope(entry.url)).forEach(entry => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${entry.url}</td>
+      <td>${entry.method}</td>
+      <td>${entry.status}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function addScope(type, url) {
+  await fetch(`${API_URL}/add`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, url })
+  });
+  await fetchScope();
+  await fetchSiteMap();
+}
+
+async function removeScope(type, url) {
+  await fetch(`${API_URL}/remove`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, url })
+  });
+  await fetchScope();
+  await fetchSiteMap();
+}
+
+document.getElementById('scope-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const url = document.getElementById('scope-url').value.trim();
+  const type = document.getElementById('scope-type').value;
+  if (url) {
+    addScope(type, url);
+    document.getElementById('scope-url').value = '';
+  }
+});
+
+document.getElementById('clear-sitemap').addEventListener('click', async function() {
+  await fetch('http://localhost:4000/api/sitemap/clear', { method: 'POST' });
+  fetchSiteMap();
+});
+
+// Initial load
+fetchScope();
+fetchSiteMap();
+</script>
+
+    <!-- 1. Site Map Section (Frontend Integration) -->
+
+
+<script>
+// SITEMAP_API is already declared above, so do not redeclare it here.
+
+async function fetchSiteMap() {
+  const res = await fetch(SITEMAP_API);
+  const data = await res.json();
+  renderSiteMap(data);
+}
+
+function renderSiteMap(siteMap) {
+  const tbody = document.getElementById('sitemap-table-body');
+  tbody.innerHTML = '';
+  siteMap.forEach(entry => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${entry.url}</td>
+      <td>${entry.method}</td>
+      <td>${entry.status}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Initial load
+fetchSiteMap();
+</script>
+
+    <!-- 2. Spider / Crawler -->
+    <section id="crawler" class="mb-12">
+      <h2 class="section-title">🔍 Automated Crawler</h2>
+      <div class="section-card mb-8">
+        <form id="crawler-form" class="flex gap-4 items-end">
+          <div>
+            <label class="block text-light-gray mb-1" for="crawl-url">Start URL</label>
+            <input id="crawl-url" type="text" class="rounded-md p-2" placeholder="https://example.com" required>
+          </div>
+          <button type="submit" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Start Crawl</button>
+        </form>
+      </div>
+    </section>
+    <script>
+document.getElementById('crawler-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const startUrl = document.getElementById('crawl-url').value.trim();
+  if (startUrl) {
+    await fetch('http://localhost:4000/api/crawl', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ startUrl })
+    });
+    if (typeof fetchSiteMap === 'function') fetchSiteMap();
+  }
+});
+    </script>
+
+    <!-- Scanner Section -->
+<section id="scanner" class="mb-12">
+  <h2 class="section-title">🛡️ Vulnerability Scanner</h2>
+  <div class="section-card mb-8">
+    <button id="scan-btn" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium mb-4 focus:outline-none" style="outline:none;box-shadow:none;">
+      Scan for OWASP Top 10
+    </button>
+    <button id="simulate-btn" style="opacity:0.15; font-size:0.8em; margin-top:4px; display:block;" class="bg-gray-700 text-white py-1 px-3 rounded-md focus:outline-none" tabindex="0">
+      Simulate Vulnerabilities
+    </button>
+    <button id="view-report-btn" class="bg-orange-700 hover:bg-orange-800 text-white py-2 px-4 rounded-md font-medium mt-4">
+      View Enhanced Vulnerability Report
+    </button>
+    <div id="scan-results" class="mt-4 flex flex-wrap gap-4"></div>
+  </div>
+</section>
+
+<!-- Modal for Enhanced Vulnerability Report -->
+<div id="report-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:#23272e;padding:2rem;border-radius:8px;max-width:900px;width:95%;color:#fff;position:relative;max-height:90vh;overflow-y:auto;">
+    <button onclick="document.getElementById('report-modal').style.display='none'" style="position:absolute;top:8px;right:12px;font-size:1.2em;color:#fff;background:none;border:none;cursor:pointer;">&times;</button>
+    <h3 class="text-lg font-bold mb-4 text-orange-400">Enhanced Vulnerability Report</h3>
+    <div id="modal-report-cards" class="flex flex-wrap gap-4"></div>
   </div>
 </div>
-</section>
-    <!-- Contact Section -->
-    <section id="contact" class="py-16 px-4 bg-[#191919]">
-        <div class="container mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">Get in <span class="text-primary">Touch</span></h2>
-                <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
-                    Cybersecurity starts with conversation.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div>
-                    <form action="https://formsubmit.co/glanloyan@gmail.com" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="name" class="block text-sm font-medium mb-2">Full Name</label>
-                                <input type="text" id="name" name="name" class="w-full bg-secondary border border-gray-700 rounded-md py-3 px-4 focus:outline-none focus:border-primary">
-                            </div>
-                            <div>
-                                <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
-                                <input type="email" id="email" name="email" class="w-full bg-secondary border border-gray-700 rounded-md py-3 px-4 focus:outline-none focus:border-primary">
-                            </div>
-                        </div>
-                        <div>
-                            <label for="subject" class="block text-sm font-medium mb-2">Subject</label>
-                            <input type="text" id="subject" name="subject" class="w-full bg-secondary border border-gray-700 rounded-md py-3 px-4 focus:outline-none focus:border-primary">
-                        </div>
-                        <div>
-                            <label for="message" class="block text-sm font-medium mb-2">Message</label>
-                            <textarea id="message" name="message" rows="5" class="w-full bg-secondary border border-gray-700 rounded-md py-3 px-4 focus:outline-none focus:border-primary"></textarea>
-                        </div>
-                        <button type="submit" class="bg-primary hover:bg-orange-600 text-white py-3 px-8 rounded-md font-medium transition-all">
-                            Send Message
-                        </button>
-                    </form>
-                </div>
-                
-                <div>
-                    <div class="bg-secondary p-8 rounded-xl border border-gray-700 h-full">
-                        <h3 class="text-xl font-bold mb-6">Contact Information</h3>
-                        
-                        <div class="space-y-6">
-                            <div class="flex items-start">
-                                <div class="bg-primary/20 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
-                                    <i class="bi bi-geo-alt text-primary text-xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium mb-1">Location</h4>
-                                    <p class="text-gray-300">Mangaluru,Karnataka,India</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <div class="bg-primary/20 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
-                                    <i class="bi bi-envelope text-primary text-xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium mb-1">Email</h4>
-                                    <p class="text-gray-300">glanloyand@realseclabs.com</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <div class="bg-primary/20 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
-                                    <i class="bi bi-telephone text-primary text-xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium mb-1">Phone</h4>
-                                    <p class="text-gray-300"></p>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-8">
-                            <h4 class="font-medium mb-3">Follow Us</h4>
-                            <div class="flex space-x-4">
-                                <a href="#" class="bg-primary/20 text-primary hover:bg-primary hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
-                                    <i class="bi bi-linkedin"></i>
-                                </a>
-                                <a href="#" class="bg-primary/20 text-primary hover:bg-primary hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
-                                    <i class="bi bi-twitter-x"></i>
-                                </a>
-                                <a href="#" class="bg-primary/20 text-primary hover:bg-primary hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
-                                    <i class="bi bi-github"></i>
-                                </a>
-                                <a href="#" class="bg-primary/20 text-primary hover:bg-primary hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
-                                    <i class="bi bi-facebook"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+<!-- Repeater Modal -->
+<div id="repeater-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:1001;align-items:center;justify-content:center;">
+  <div style="background:#23272e;padding:2rem;border-radius:8px;max-width:600px;width:95%;color:#fff;position:relative;">
+    <button onclick="document.getElementById('repeater-modal').style.display='none'" style="position:absolute;top:8px;right:12px;font-size:1.2em;color:#fff;background:none;border:none;cursor:pointer;">&times;</button>
+    <h3 class="text-lg font-bold mb-4 text-orange-400">Repeater </h3>
+    <div>
+      <label class="font-semibold">Request:</label>
+      <textarea id="repeater-request" style="width:100%;height:80px;background:#181a20;color:#fff;border-radius:4px;margin-bottom:8px;"></textarea>
+      <button id="repeater-resend" class="bg-blue-700 hover:bg-blue-800 text-white py-1 px-3 rounded-md mb-2">Resend</button>
+      <div>
+        <label class="font-semibold">Response:</label>
+        <pre id="repeater-response" style="background:#181a20;color:#fff;padding:8px;border-radius:4px;">(Simulated response will appear here)</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Intruder Modal -->
+<div id="intruder-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:1001;align-items:center;justify-content:center;">
+  <div style="background:#23272e;padding:2rem;border-radius:8px;max-width:600px;width:95%;color:#fff;position:relative;">
+    <button onclick="document.getElementById('intruder-modal').style.display='none'" style="position:absolute;top:8px;right:12px;font-size:1.2em;color:#fff;background:none;border:none;cursor:pointer;">&times;</button>
+    <h3 class="text-lg font-bold mb-4 text-orange-400">Intruder </h3>
+    <div>
+      <label class="font-semibold">Attack Request:</label>
+      <textarea id="intruder-request" style="width:100%;height:80px;background:#181a20;color:#fff;border-radius:4px;margin-bottom:8px;"></textarea>
+      <label class="font-semibold">Payloads (one per line):</label>
+      <textarea id="intruder-payloads" style="width:100%;height:60px;background:#181a20;color:#fff;border-radius:4px;margin-bottom:8px;">test1
+test2
+' OR 1=1--
+</textarea>
+      <button id="intruder-attack" class="bg-blue-700 hover:bg-blue-800 text-white py-1 px-3 rounded-md mb-2">Start Attack</button>
+      <div>
+        <label class="font-semibold">Results:</label>
+        <div id="intruder-results" style="background:#181a20;color:#fff;padding:8px;border-radius:4px;max-height:120px;overflow-y:auto;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const vulnEnhancements = {
+  "SQL Injection": {
+    severity: "High",
+    description: "SQL Injection allows attackers to execute arbitrary SQL code on the backend database, potentially leading to data leakage or modification.",
+    remediation: "Use parameterized queries or prepared statements. Validate and sanitize all user inputs."
+  },
+  "Reflected XSS": {
+    severity: "Medium",
+    description: "Reflected Cross-Site Scripting (XSS) allows attackers to inject malicious scripts into web pages viewed by other users.",
+    remediation: "Properly encode output and validate user input. Use Content Security Policy (CSP)."
+  },
+  "Stored XSS": {
+    severity: "High",
+    description: "Stored XSS occurs when malicious scripts are permanently stored on the target server and executed when users access the affected content.",
+    remediation: "Sanitize and validate all user input before storing. Encode output and use CSP."
+  },
+  "Open Redirect": {
+    severity: "Low",
+    description: "Open Redirects can be used to redirect users to malicious sites, facilitating phishing attacks.",
+    remediation: "Avoid using user input directly in redirects. Validate redirect destinations against a whitelist."
+  },
+  "Directory Traversal": {
+    severity: "High",
+    description: "Directory Traversal allows attackers to access files and directories outside the intended scope.",
+    remediation: "Sanitize file paths and use secure APIs that prevent path traversal."
+  },
+  "Command Injection": {
+    severity: "Critical",
+    description: "Command Injection allows attackers to execute arbitrary commands on the server.",
+    remediation: "Avoid using user input in system commands. Use safe APIs and validate all inputs."
+  }
+};
+
+const allVulns = [
+  {
+    url: 'http://testphp.vulnweb.com/listproducts.php?cat=1\' OR 1=1--',
+    type: 'SQL Injection',
+    payload: "' OR 1=1--",
+    site: 'http://testphp.vulnweb.com/'
+  },
+  {
+    url: 'http://testphp.vulnweb.com/artists.php?artist=<script>alert(1)<\/script>',
+    type: 'Reflected XSS',
+    payload: '<script>alert(1)<\/script>',
+    site: 'http://testphp.vulnweb.com/'
+  },
+  {
+    url: 'http://testphp.vulnweb.com/redirect.php?url=https://evil.com',
+    type: 'Open Redirect',
+    payload: 'https://evil.com',
+    site: 'http://testphp.vulnweb.com/'
+  },
+  {
+    url: 'http://testphp.vulnweb.com/showimage.php?file=../../../../etc/passwd',
+    type: 'Directory Traversal',
+    payload: '../../../../etc/passwd',
+    site: 'http://testphp.vulnweb.com/'
+  },
+  {
+    url: 'http://testphp.vulnweb.com/comments.php?name=<img src=x onerror=alert(1)>',
+    type: 'Stored XSS',
+    payload: '<img src=x onerror=alert(1)>',
+    site: 'http://testphp.vulnweb.com/'
+  },
+  {
+    url: 'http://testphp.vulnweb.com/guestbook.php?cmd=ls',
+    type: 'Command Injection',
+    payload: 'ls',
+    site: 'http://testphp.vulnweb.com/'
+  }
+];
+
+function getRandomVulns(arr, n) {
+  const shuffled = arr.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, n);
+}
+
+let lastSimulated = [];
+
+document.getElementById('simulate-btn').addEventListener('click', function() {
+  // Show loader and scanning text
+  document.getElementById('simulate-loader').style.display = 'flex';
+  document.getElementById('scan-results').innerHTML = '';
+  // Wait for 5 seconds before displaying vulnerabilities
+  setTimeout(() => {
+    const count = Math.floor(Math.random() * 2) + 5; // 5 or 6
+    lastSimulated = getRandomVulns(allVulns, count);
+    document.getElementById('scan-results').innerHTML = lastSimulated.map((v, idx) =>
+      `<div class="bg-gray-800 rounded-lg p-4 shadow-md w-72 mb-3">
+        <div class="font-bold text-orange-400 mb-2">${v.type}</div>
+        <div class="text-light-gray text-xs mb-1 break-all"><span class="font-semibold">URL:</span> ${v.url}</div>
+        <div class="text-light-gray text-xs mb-2"><span class="font-semibold">Payload:</span> ${v.payload}</div>
+        <div class="flex gap-2 mt-2">
+          <button class="report-btn bg-blue-700 hover:bg-blue-800 text-white py-1 px-2 rounded text-xs" data-idx="${idx}">Create Report</button>
+          <button class="intruder-btn bg-gray-700 hover:bg-gray-800 text-white py-1 px-2 rounded text-xs" data-idx="${idx}">Send to Intruder</button>
+          <button class="repeater-btn bg-gray-700 hover:bg-gray-800 text-white py-1 px-2 rounded text-xs" data-idx="${idx}">Send to Repeater</button>
         </div>
+      </div>`
+    ).join('');
+    // Only Create Report button works, others are just UI
+    document.querySelectorAll('.report-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const vuln = lastSimulated[parseInt(btn.getAttribute('data-idx'))];
+        const report = `Vulnerability Report\n\nType: ${vuln.type}\nURL: ${vuln.url}\nPayload: ${vuln.payload}\n`;
+        const blob = new Blob([report], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'vulnerability_report.txt';
+        link.click();
+        e.stopPropagation();
+      });
+    });
+    // Hide loader
+    document.getElementById('simulate-loader').style.display = 'none';
+  }, 5000);
+});
+
+// Modal for Enhanced Vulnerability Report
+document.getElementById('view-report-btn').addEventListener('click', function() {
+  const modal = document.getElementById('report-modal');
+  const cards = document.getElementById('modal-report-cards');
+  if (!lastSimulated.length) {
+    cards.innerHTML = '<div class="text-red-400">No vulnerabilities identified. Please simulate vulnerabilities first.</div>';
+  } else {
+    cards.innerHTML = lastSimulated.map((v, idx) => {
+      const enh = vulnEnhancements[v.type] || {};
+      return `<div class="bg-gray-800 rounded-lg p-4 shadow-md w-80 mb-3 border border-orange-700">
+        <div class="font-bold text-orange-400 mb-2">${v.type}</div>
+        <div class="text-xs mb-1 break-all"><span class="font-semibold">URL:</span> ${v.url}</div>
+        <div class="text-xs mb-1"><span class="font-semibold">Payload:</span> ${v.payload}</div>
+        <div class="text-xs mb-1"><span class="font-semibold">Severity:</span> <span style="color:${enh.severity==='Critical'?'#ff5555':enh.severity==='High'?'#ffae42':enh.severity==='Medium'?'#ffd700':'#fff'}">${enh.severity||'N/A'}</span></div>
+        <div class="text-xs mb-1"><span class="font-semibold">Description:</span> ${enh.description||'No description available.'}</div>
+        <div class="text-xs"><span class="font-semibold">Remediation:</span> ${enh.remediation||'No remediation available.'}</div>
+        <div class="flex gap-2 mt-2">
+          <button class="intruder-btn bg-gray-700 hover:bg-gray-800 text-white py-1 px-2 rounded text-xs" data-idx="${idx}">Send to Intruder</button>
+          <button class="repeater-btn bg-gray-700 hover:bg-gray-800 text-white py-1 px-2 rounded text-xs" data-idx="${idx}">Send to Repeater</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  modal.style.display = 'flex';
+});
+
+// Repeater & Intruder simulation handlers
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('repeater-btn')) {
+    const idx = parseInt(e.target.getAttribute('data-idx'));
+    const vuln = lastSimulated[idx];
+    document.getElementById('repeater-request').value =
+      `GET ${vuln.url} HTTP/1.1\nHost: ${vuln.url.split('/')[2]}\nUser-Agent: Mozilla/5.0\nAccept: */*\nConnection: close\n\n`;
+    document.getElementById('repeater-response').innerHTML = '<span style="color:#888;">(Simulated response will appear here)</span>';
+    document.getElementById('repeater-modal').style.display = 'flex';
+  }
+  if (e.target.classList.contains('intruder-btn')) {
+    const idx = parseInt(e.target.getAttribute('data-idx'));
+    const vuln = lastSimulated[idx];
+    // Mark the payload with § for simulation
+    const markedUrl = vuln.url.replace(encodeURIComponent(vuln.payload), `§${vuln.payload}§`);
+    document.getElementById('intruder-request').value =
+      `GET ${markedUrl} HTTP/1.1\nHost: ${vuln.url.split('/')[2]}\nUser-Agent: Mozilla/5.0\nAccept: */*\nConnection: close\n\n`;
+    document.getElementById('intruder-results').innerHTML = '';
+    document.getElementById('intruder-modal').style.display = 'flex';
+  }
+});
+
+// Intruder attack simulation with loader and more details
+document.getElementById('intruder-attack').onclick = function() {
+  const req = document.getElementById('intruder-request').value;
+  const payloads = document.getElementById('intruder-payloads').value.split('\n').filter(p => p.trim());
+  const resultsDiv = document.getElementById('intruder-results');
+  // Show loader
+  resultsDiv.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div style="border: 4px solid #444; border-top: 4px solid #ff9800; border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin-bottom:10px;"></div>
+      <span style="color:#ff9800;font-weight:bold;">Attacking...</span>
+    </div>
+  `;
+  // Simulate 10 seconds delay
+  setTimeout(() => {
+    let results = `<table style="width:100%;font-size:0.95em;border-collapse:collapse;">
+      <tr style="background:#333;">
+        <th style="padding:4px;">#</th>
+        <th style="padding:4px;">Payload</th>
+        <th style="padding:4px;">Status</th>
+        <th style="padding:4px;">Length</th>
+        <th style="padding:4px;">Time (ms)</th>
+        <th style="padding:4px;">Remark</th>
+      </tr>`;
+    payloads.forEach((p, i) => {
+      const status = Math.random() > 0.7 ? 302 : 200;
+      const length = Math.floor(Math.random() * 1000) + 500;
+      const time = Math.floor(Math.random() * 200) + 100;
+      const remark = status === 302 ? 'Redirected' : (Math.random() > 0.9 ? 'Interesting' : '');
+      results += `<tr style="background:${i%2===0?'#222':'#292929'};">
+        <td style="padding:4px;">${i+1}</td>
+        <td style="padding:4px;">${p}</td>
+        <td style="padding:4px;">${status}</td>
+        <td style="padding:4px;">${length}</td>
+        <td style="padding:4px;">${time}</td>
+        <td style="padding:4px;">${remark}</td>
+      </tr>`;
+    });
+    results += '</table>';
+    resultsDiv.innerHTML = results;
+  }, 10000); // 10 seconds delay
+};
+    </script>
+
+    <!-- 4. Request Editor / Repeater -->
+    <section id="repeater" class="mb-12">
+      <h2 class="section-title text-2xl font-heading font-bold mb-6 gradient-text">📝 Request Editor / Repeater</h2>
+      <div class="section-card">
+        <form>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="request-raw">Raw HTTP Request</label>
+            <textarea id="request-raw" rows="6" class="w-full rounded-md p-2 code-editor" placeholder="GET / HTTP/1.1&#10;Host: example.com"></textarea>
+          </div>
+          <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium mb-4">Send</button>
+          <div>
+            <label class="block text-light-gray mb-1" for="response-raw">Raw HTTP Response</label>
+            <textarea id="response-raw" rows="6" class="w-full rounded-md p-2 code-editor" readonly placeholder="HTTP/1.1 200 OK&#10;..."></textarea>
+          </div>
+        </form>
+      </div>
     </section>
-    
-    <!-- Footer -->
-    <footer class="bg-[#101010] text-gray-300 py-12 px-4">
-        <div class="container mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Company Info -->
-                <div>
-                    <div class="flex flex-col items-start mb-6">
-                        <img src="./assets/images/RealSecLabs-Logo-nobg.png" alt="RealSec Labs Logo" class="h-10 mb-3" onclick="location.href='#home';">
-                        <p class="text-gray-400">
-                            Building Security through Trust.
-                        </p>
-                    </div>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-primary">
-                            <i class="bi bi-linkedin"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-primary">
-                            <i class="bi bi-twitter-x"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-primary">
-                            <i class="bi bi-github"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-primary">
-                            <i class="bi bi-facebook"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="font-bold text-lg mb-6">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="./index.html" class="text-gray-400 hover:text-primary">Home</a></li>
-                        <li><a href="#latest-articles" class="text-gray-400 hover:text-primary">Latest Articles</a></li>
-                        <li><a href="#" id="trigger-modal" class="text-gray-400 hover:text-primary">Categories</a></li>
-                        <li><a href="https://realseclabs.com/" class="text-gray-400 hover:text-primary">realseclabs</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Policies Section -->
-                <div>
-                    <h4 class="font-bold text-lg mb-6">Policies</h4>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="https://realseclabs.com/privacy-policy" class="text-gray-400 hover:text-primary">Privacy Policy</a>
-                        </li>
-                        <li>
-                            <a href="https://realseclabs.com/copyright-notice" class="text-gray-400 hover:text-primary">Copyright Notice</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 mt-12 pt-8 text-sm text-gray-400">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <p>&copy; 2025 RealSec Labs. All rights reserved.</p>
-                    <div class="flex space-x-6 mt-4 md:mt-0">
-                        <a href="https://realseclabs.com/privacy-policy" class="hover:text-primary">Privacy Policy</a>
-                        <a href="https://realseclabs.com/copyright-notice" class="hover:text-primary">Copyright Notice</a>
-                        
-                    </div>
-                </div>
-            </div>
+
+    <!-- 5. Intruder -->
+    <section id="intruder" class="mb-12">
+      <h2 class="section-title text-2xl font-heading font-bold mb-6 gradient-text">🎯 Intruder (Fuzzer)</h2>
+      <div class="section-card">
+        <form>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="intruder-request">Request Template</label>
+            <textarea id="intruder-request" rows="4" class="w-full rounded-md p-2 code-editor" placeholder="POST /login HTTP/1.1&#10;Host: example.com&#10;username=§user§&amp;password=§pass§"></textarea>
+          </div>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="payloads">Payload List</label>
+            <textarea id="payloads" rows="2" class="w-full rounded-md p-2" placeholder="admin&#10;test&#10;root"></textarea>
+          </div>
+          <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Start Fuzzing</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 6. Scanner Reports -->
+    <section id="reports" class="mb-12">
+      <h2 class="section-title text-2xl font-heading font-bold mb-6 gradient-text">📊 Vulnerability Dashboard</h2>
+      <div class="grid md:grid-cols-3 gap-8 mb-6">
+        <div class="section-card text-center">
+          <h3 class="text-primary font-bold mb-2">High</h3>
+          <p class="text-3xl font-bold status-high">2</p>
         </div>
-    </footer>
+        <div class="section-card text-center">
+          <h3 class="text-primary font-bold mb-2">Medium</h3>
+          <p class="text-3xl font-bold status-medium">5</p>
+        </div>
+        <div class="section-card text-center">
+          <h3 class="text-primary font-bold mb-2">Low</h3>
+          <p class="text-3xl font-bold status-low">8</p>
+        </div>
+      </div>
+      <div class="section-card overflow-x-auto">
+        <table class="section-table">
+          <thead>
+            <tr>
+              <th>Vulnerability</th>
+              <th>Severity</th>
+              <th>URL/Param</th>
+              <th>CVE/CWE</th>
+              <th>PoC</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>XSS</td>
+              <td class="status-high">High</td>
+              <td>/search?q=</td>
+              <td>CWE-79</td>
+              <td><button class="bg-primary hover:bg-orange-600 text-white py-1 px-3 rounded">View</button></td>
+              <td>Sanitize user input</td>
+            </tr>
+            <tr>
+              <td>Server Header Leak</td>
+              <td class="status-low">Low</td>
+              <td>/</td>
+              <td>CWE-200</td>
+              <td><button class="bg-primary hover:bg-orange-600 text-white py-1 px-3 rounded">View</button></td>
+              <td>Remove version headers</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="flex gap-4 mt-4">
+          <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Export PDF</button>
+          <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Export JSON</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Logging & History -->
+    <section id="logs" class="mb-12">
+      <h2 class="section-title text-2xl font-heading font-bold mb-6 gradient-text">🧾 Logs & History</h2>
+      <div class="section-card">
+        <div class="mb-4">
+          <label class="block text-light-gray mb-1">Filter:</label>
+          <select class="w-48 rounded-md p-2">
+            <option>All</option>
+            <option>GET</option>
+            <option>POST</option>
+            <option>Status 200</option>
+            <option>Status 4xx/5xx</option>
+          </select>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="section-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Method</th>
+                <th>URL</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>12:01:23</td>
+                <td>GET</td>
+                <td>/dashboard</td>
+                <td class="status-low">200</td>
+              </tr>
+              <tr>
+                <td>12:01:25</td>
+                <td>POST</td>
+                <td>/login</td>
+                <td class="status-medium">302</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium mt-4">Export Logs</button>
+      </div>
+    </section>
+
+    <!-- 8. Authentication Handling -->
+    <section id="settings" class="mb-12">
+      <h2 class="section-title text-2xl font-heading font-bold mb-6 gradient-text">🔐 Authentication Handling</h2>
+      <div class="section-card">
+        <form>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="auth-type">Auth Type</label>
+            <select id="auth-type" class="w-full rounded-md p-2">
+              <option>None</option>
+              <option>Basic</option>
+              <option>Bearer Token</option>
+              <option>Cookie</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="auth-credentials">Credentials / Token / Cookie</label>
+            <input id="auth-credentials" type="text" class="w-full rounded-md p-2" placeholder="Enter value here">
+          </div>
+          <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Save Auth</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 9. Custom Payloads -->
+    <section id="payloads" class="mb-12">
+      <h2 class="section-title text-2xl font-heading font-bold mb-6 gradient-text">🧬 Custom Payloads</h2>
+      <div class="section-card">
+        <form>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="payload-type">Vulnerability Type</label>
+            <select id="payload-type" class="w-full rounded-md p-2">
+              <option>XSS</option>
+              <option>SQLi</option>
+              <option>SSRF</option>
+              <option>Command Injection</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="custom-payloads">Payloads</label>
+            <textarea id="custom-payloads" rows="3" class="w-full rounded-md p-2" placeholder="Enter one payload per line"></textarea>
+          </div>
+          <div class="flex gap-4">
+            <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Save Payloads</button>
+            <button type="button" class="bg-secondary border border-primary text-primary py-2 px-6 rounded-md font-medium">Update from GitHub</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 10. Configurable Scan Settings -->
+    <section id="scan-settings" class="mb-12">
+      <h2 class="section-title text-2xl font-heading font-bold mb-6 gradient-text">⚙️ Scan Settings</h2>
+      <div class="section-card">
+        <form>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="scan-depth">Scan Depth</label>
+            <input id="scan-depth" type="number" min="1" max="10" value="3" class="w-32 rounded-md p-2">
+          </div>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="scan-delay">Delay Between Requests (ms)</label>
+            <input id="scan-delay" type="number" min="0" value="500" class="w-32 rounded-md p-2">
+          </div>
+          <div class="mb-4">
+            <label class="block text-light-gray mb-1" for="user-agent">User Agent</label>
+            <input id="user-agent" type="text" value="Intruscan/1.0" class="w-full rounded-md p-2">
+          </div>
+          <div class="mb-4 flex gap-6">
+            <label class="inline-flex items-center">
+              <input type="checkbox" checked class="accent-primary mr-2"> Enable Active Scan
+            </label>
+            <label class="inline-flex items-center">
+              <input type="checkbox" checked class="accent-primary mr-2"> Enable Passive Scan
+            </label>
+          </div>
+          <button type="button" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Save Settings</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Sleek Responsive Features Grid for Intruscan with Icons and Table Example -->
+    <section id="features" class="container mx-auto px-4 py-20">
+      <h2 class="text-4xl md:text-5xl font-heading font-bold text-center mb-14 gradient-text">
+        Intruscan Features
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Scope Manager -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-bullseye text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Scope Manager</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-2">Define exactly what to scan. Include/exclude domains and URLs for precise targeting.</p>
+          <table class="w-full text-xs mt-2 border border-[#333] rounded">
+            <thead>
+              <tr class="bg-[#191919] text-primary">
+                <th class="p-1 border border-[#333]">Include</th>
+                <th class="p-1 border border-[#333]">Exclude</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="p-1 border border-[#333]">example.com</td>
+                <td class="p-1 border border-[#333]">example.com/logout</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Site Map -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-diagram-3 text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Site Map</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-2">Visual map of all discovered endpoints, methods, and status codes.</p>
+          <table class="w-full text-xs mt-2 border border-[#333] rounded">
+            <thead>
+              <tr class="bg-[#191919] text-primary">
+                <th class="p-1 border border-[#333]">URL</th>
+                <th class="p-1 border border-[#333]">Method</th>
+                <th class="p-1 border border-[#333]">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="p-1 border border-[#333]">/login</td>
+                <td class="p-1 border border-[#333]">POST</td>
+                <td class="p-1 border border-[#333] text-yellow-400">302</td>
+              </tr>
+              <tr>
+                <td class="p-1 border border-[#333]">/dashboard</td>
+                <td class="p-1 border border-[#333]">GET</td>
+                <td class="p-1 border border-[#333] text-green-400">200</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Automated Crawler -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-search text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Automated Crawler</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-2">Crawls static & dynamic links, parses forms, parameters, and cookies.</p>
+        </div>
+        <!-- Passive & Active Scanner -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-shield-check text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Passive & Active Scanner</span>
+          </div>
+          <ul class="list-disc pl-6 text-gray-400 text-sm mb-2">
+            <li>Detects XSS, SQLi, SSRF, Command Injection, Open Redirects, File Inclusion</li>
+            <li>Finds server leaks, insecure cookies, version disclosures</li>
+          </ul>
+        </div>
+        <!-- Request Repeater -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-terminal text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Request Repeater</span>
+          </div>
+          <p class="text-gray-400 text-sm">Manually craft, modify, and resend HTTP requests for advanced debugging and testing.</p>
+        </div>
+        <!-- Intruder (Fuzzer) -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-lightning-charge text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Intruder (Fuzzer)</span>
+          </div>
+          <p class="text-gray-400 text-sm">Fuzz endpoints with custom payloads and automate attack simulations.</p>
+        </div>
+        <!-- Vulnerability Dashboard -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-bar-chart text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Vulnerability Dashboard</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-2">Severity-wise summary, CVE/CWE reference, PoC, fix recommendations, and exportable reports.</p>
+          <table class="w-full text-xs mt-2 border border-[#333] rounded">
+            <thead>
+              <tr class="bg-[#191919] text-primary">
+                <th class="p-1 border border-[#333]">Vulnerability</th>
+                <th class="p-1 border border-[#333]">Severity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="p-1 border border-[#333]">XSS</td>
+                <td class="p-1 border border-[#333] text-red-400">High</td>
+              </tr>
+              <tr>
+                <td class="p-1 border border-[#333]">Server Header Leak</td>
+                <td class="p-1 border border-[#333] text-green-400">Low</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Logs & History -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-clock-history text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Logs & History</span>
+          </div>
+          <p class="text-gray-400 text-sm">Track all HTTP requests/responses and filter or export logs as needed.</p>
+        </div>
+        <!-- Authentication Handling -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-unlock text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Authentication Handling</span>
+          </div>
+          <p class="text-gray-400 text-sm">Input credentials, tokens, or cookies to scan authenticated areas securely.</p>
+        </div>
+        <!-- Custom Payloads -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-list-stars text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Custom Payloads</span>
+          </div>
+          <p class="text-gray-400 text-sm">Define and manage your own payload sets for targeted vulnerability testing.</p>
+        </div>
+        <!-- Configurable Scan Settings -->
+        <div class="bg-[#232323] rounded-2xl border-l-4 border-primary p-6 shadow-lg card-hover flex flex-col h-full">
+          <div class="flex items-center mb-3">
+            <i class="bi bi-sliders text-primary text-3xl mr-3"></i>
+            <span class="font-bold text-lg text-white">Configurable Scan Settings</span>
+          </div>
+          <p class="text-gray-400 text-sm">Set scan depth, delays, user agents, and toggle scan modes for full control.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Temporary Site Map Entry Form for Testing -->
+    <div class="section-card mb-8">
+      <h3 class="text-lg font-bold mb-2 text-primary">Add Site Map Entry (Test Only)</h3>
+      <form id="sitemap-test-form" class="flex flex-wrap gap-4 items-end">
+        <div>
+          <label class="block text-light-gray mb-1" for="test-url">URL</label>
+          <input id="test-url" type="text" class="rounded-md p-2" placeholder="/login" required>
+        </div>
+        <div>
+          <label class="block text-light-gray mb-1" for="test-method">Method</label>
+          <select id="test-method" class="rounded-md p-2">
+            <option>GET</option>
+            <option>POST</option>
+            <option>PUT</option>
+            <option>DELETE</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-light-gray mb-1" for="test-status">Status</label>
+          <input id="test-status" type="number" class="rounded-md p-2" placeholder="200" required>
+        </div>
+        <button type="submit" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium">Add</button>
+      </form>
+    </div>
 
     <script>
-        // Mobile menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('menu-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            menuToggle.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // Get in Touch modal
-            const getInTouchBtn = document.getElementById('getInTouch');
-            getInTouchBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                showContactModal();
-            });
-            
-            // Contact modal form submission
-            const contactModalForm = document.getElementById('contactModalForm');
-            if (contactModalForm) {
-                contactModalForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Get form fields
-                    const name = document.getElementById('modal-name').value;
-                    const email = document.getElementById('modal-email').value;
-                    const domain = document.getElementById('hiring-domain').value;
-                    
-                    // Basic validation
-                    if (!name || !email || !domain) {
-                        alert('Please fill out all fields');
-                        return;
-                    }
-                    
-                    // Email validation
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(email)) {
-                        alert('Please enter a valid email address');
-                        return;
-                    }
-                    
-                    // Simulated form submission
-                    const submitBtn = contactModalForm.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
-                    
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = `
-                        <div class="inline-block w-4 h-4 mr-2 loading-spinner"></div>
-                        Sending...
-                    `;
-                    
-                    // Simulate API request
-                    setTimeout(() => {
-                        alert('Thank you for your interest! Our team will contact you soon.');
-                        contactModalForm.reset();
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalText;
-                        hideContactModal();
-                    }, 2000);
-                });
-            }
-            
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    if (this.getAttribute('href') === '#') return;
-
-                    e.preventDefault();
-
-                    // Close mobile menu if open
-                    const mobileMenu = document.getElementById('mobile-menu');
-                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
-
-                    // Scroll to section with offset
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = targetId ? document.getElementById(targetId) : null;
-                    if (targetElement) {
-                        const offset = 120; // Adjust this value to ensure the section is fully visible
-                        const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-                        const offsetPosition = elementPosition - offset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        });
-
-        // Tool demo functionality
-        function showToolDemo(tool) {
-            const demoContainer = document.getElementById('toolDemo');
-            demoContainer.classList.remove('hidden');
-            
-            // Hide all demos
-            document.getElementById('intruscanDemo').classList.add('hidden');
-            document.getElementById('iamrealDemo').classList.add('hidden');
-            
-            // Show selected demo
-            document.getElementById(`${tool}Demo`).classList.remove('hidden');
-            
-            // Disable body scroll
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function hideToolDemo() {
-            const demoContainer = document.getElementById('toolDemo');
-            demoContainer.classList.add('hidden');
-            
-            // Re-enable body scroll
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Contact modal functionality
-        function showContactModal() {
-            const contactModal = document.getElementById('contactModal');
-            contactModal.classList.remove('hidden');
-            
-            // Disable body scroll
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function hideContactModal() {
-            const contactModal = document.getElementById('contactModal');
-            contactModal.classList.add('hidden');
-            
-            // Re-enable body scroll
-            document.body.style.overflow = 'auto';
-        }
-
-        // Resume modal functionality
-        function showResumeModal() {
-            const resumeModal = document.getElementById('resumeModal');
-            resumeModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Disable body scroll
-        }
-        
-        function hideResumeModal() {
-            const resumeModal = document.getElementById('resumeModal');
-            resumeModal.classList.add('hidden');
-            document.body.style.overflow = 'auto'; // Re-enable body scroll
-        }
-
-        function downloadResume(domain) {
-            let resumeUrl = '';
-            switch (domain) {
-                case 'blue-team':
-                    resumeUrl = 'assets/Resume/Glan Loyan Dsouza - Blue Teaming(Defensive Security).pdf'; // Replace with actual file path
-                    break;
-                case 'red-team':
-                    resumeUrl = 'assets/Resume/Glan Loyan Dsouza - Red Teaming(Offensive Security).pdf'; // Replace with actual file path
-                    break;
-                case 'purple-team':
-                    resumeUrl = 'assets/Resume/Glan Loyan Dsouza - Purple Teaming.pdf'; // Replace with actual file path
-                    break;
-                default:
-                    alert('Please select a valid domain');
-                    return;
-            }
-            window.open(resumeUrl, '_blank'); // Open the resume in a new tab
-            hideResumeModal(); // Close the modal after download
-        }
-
-        function handleResumeDownload() {
-            const resumeType = document.getElementById('resume-type').value;
-
-            if (!resumeType) {
-                alert('Please select a resume type');
-                return;
-            }
-
-            let resumeUrl = '';
-            switch (resumeType) {
-                case 'blue-team':
-                    resumeUrl = 'assets/Resume/Glan Loyan Dsouza - Blue Teaming(Defensive Security).pdf'; // Replace with actual file path
-                    break;
-                case 'red-team':
-                    resumeUrl = 'assets/Resume/Glan Loyan Dsouza - Red Teaming(Offensive Security).pdf'; // Replace with actual file path
-                    break;
-                case 'purple-team':
-                    resumeUrl = 'assets/Resume/Glan Loyan Dsouza - Purple Teaming.pdf'; // Replace with actual file path
-                    break;
-                default:
-                    alert('Invalid selection');
-                    return;
-            }
-
-            // Trigger the download
-            const link = document.createElement('a');
-            link.href = resumeUrl;
-            link.download = resumeUrl.split('/').pop(); // Extract the file name from the URL
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            hideResumeModal(); // Close the modal after download
-        }
-        
-        // Contact form validation (basic example)
-        document.addEventListener('DOMContentLoaded', function() {
-            const contactForm = document.querySelector('#contact form');
-            
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Get form fields
-                    const name = document.getElementById('name').value;
-                    const email = document.getElementById('email').value;
-                    const subject = document.getElementById('subject').value;
-                    const message = document.getElementById('message').value;
-                    
-                    // Basic validation
-                    if (!name || !email || !subject || !message) {
-                        alert('Please fill out all fields');
-                        return;
-                    }
-                    
-                    // Email validation
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(email)) {
-                        alert('Please enter a valid email address');
-                        return;
-                    }
-                    
-                    // Simulated form submission
-                    const submitBtn = contactForm.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
-                    
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = `
-                        <div class="inline-block w-4 h-4 mr-2 loading-spinner"></div>
-                        Sending...
-                    `;
-                    
-                    // Simulate API request
-                    setTimeout(() => {
-                        alert('Thank you! Your message has been sent successfully.');
-                        contactForm.reset();
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalText;
-                    }, 2000);
-                });
-            }
-        });
-
-        // Fetch and display GitHub repositories
-        document.addEventListener('DOMContentLoaded', function () {
-            const username = 'realseclabs'; // Replace with your GitHub username
-            const repoContainer = document.getElementById('github-repos');
-            const repoLoader = document.getElementById('repo-loader');
-
-            // Language color mapping (you can expand this list as needed)
-            const languageColors = {
-                JavaScript: '#f1e05a',
-                HTML: '#e34c26',
-                CSS: '#563d7c',
-                Python: '#3572A5',
-                Java: '#b07219',
-                TypeScript: '#2b7489',
-                Shell: '#89e051',
-                Ruby: '#701516',
-                PHP: '#4F5D95',
-                C: '#555555',
-                'C++': '#f34b7d',
-                Go: '#00ADD8',
-                Rust: '#dea584',
-                Swift: '#ffac45',
-                Kotlin: '#A97BFF',
-                // Add more languages and their colors as needed
-            };
-
-            // Show the loader
-            repoLoader.style.display = 'flex';
-
-            fetch(`https://api.github.com/users/${username}/repos`)
-                .then(response => response.json())
-                .then(repos => {
-                    // Hide the loader
-                    repoLoader.style.display = 'none';
-
-                    repos.forEach(repo => {
-                        // Fetch languages for each repository
-                        fetch(repo.languages_url)
-                            .then(response => response.json())
-                            .then(languages => {
-                                const repoCard = document.createElement('div');
-                                repoCard.className = 'tool-card p-4 rounded-lg border border-gray-700 flex flex-col justify-between';
-
-                                // Format languages with color icons (displayed horizontally)
-                                const languageList = Object.keys(languages)
-                                    .map(language => {
-                                        const color = languageColors[language] || '#cccccc'; // Default color if not found
-                                        return `<span class="flex items-center space-x-2">
-                                                  <span class="w-3 h-3 rounded-full" style="background-color: ${color};"></span>
-                                                  <span>${language}</span>
-                                                </span>`;
-                                    })
-                                    .join(''); // No line breaks, so they appear inline
-
-                                repoCard.innerHTML = `
-  <div>
-    <h4 class="font-bold mb-2">${repo.name}</h4>
-    <p class="text-gray-300 text-sm mb-3">${repo.description || 'No description available.'}</p>
-  </div>
-  <div class="mt-auto flex flex-col">
-    <div class="flex flex-wrap gap-4 text-xs text-gray-400 mb-4">
-      ${languageList}
-    </div>
-    <div class="flex justify-between items-center">
-      <div></div> <!-- Empty div to ensure alignment -->
-      <a href="${repo.html_url}" target="_blank" class="text-primary hover:underline text-sm">
-        View Repository <i class="bi bi-box-arrow-up-right text-xs ml-1"></i>
-      </a>
-    </div>
-  </div>
-`;
-
-                                repoContainer.appendChild(repoCard);
-                            })
-                            .catch(error => {
-                                console.error(`Error fetching languages for ${repo.name}:`, error);
-                            });
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching repositories:', error);
-                    repoLoader.style.display = 'none';
-                    repoContainer.innerHTML = '<p class="text-gray-300">Unable to load repositories at this time.</p>';
-                });
-        });
-    </script>
-<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
-<script>
-    const slider = document.getElementById('linkedin-slider');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-
-    prevBtn.addEventListener('click', function() {
-         slider.scrollBy({ left: -300, behavior: 'smooth' });
-    });
-
-    nextBtn.addEventListener('click', function() {
-         slider.scrollBy({ left: 300, behavior: 'smooth' });
-    });
-</script>
-<script>
-  
-  
-  // Get the width and margin of one card (adjust the gap if needed; here 32px equals space-x-8)
-  const card = slider.querySelector('.card-hover');
-  let cardWidth = card.offsetWidth;
-  // Calculate total scroll amount for 3 cards (card width + gap)
-  let gap = 32; // in pixels (adjust if your Tailwind spacing changes)
-  let scrollAmount = (cardWidth + gap) * 3;
-  
-  prevBtn.addEventListener('click', function() {
-    slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-  });
-
-  nextBtn.addEventListener('click', function() {
-    slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-  });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const contactModalForm = document.getElementById('contactModalForm');
-  if (contactModalForm) {
-    contactModalForm.addEventListener('submit', function(e) {
+    document.getElementById('sitemap-test-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      
-      // Retrieve and trim form values
-      const name = document.getElementById('modal-name').value.trim();
-      const email = document.getElementById('modal-email').value.trim();
-      const domain = document.getElementById('hiring-domain').value;
-      
-      // Basic validation
-      if (!name || !email || !domain) {
-        alert('Please fill out all fields');
-        return;
+      const url = document.getElementById('test-url').value.trim();
+      const method = document.getElementById('test-method').value;
+      const status = parseInt(document.getElementById('test-status').value, 10);
+      if (url && method && status) {
+        await fetch('http://localhost:4000/api/sitemap/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, method, status })
+        });
+        // Optionally refresh the site map table if you have that function
+        if (typeof fetchSiteMap === 'function') fetchSiteMap();
+        // Clear form
+        document.getElementById('sitemap-test-form').reset();
       }
-      
-      // Email format validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address');
-        return;
-      }
-      
-      // Construct mailto URL
-      // Change "your-email@example.com" to the recipient's email address.
-      const subject = encodeURIComponent(`Get in Touch from ${name}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nDomain: ${domain}`);
-      const mailtoLink = `mailto:glanloyand@realseclabs.com?subject=${subject}&body=${body}`;
-      
-      // Open the user's default mail client with the pre-filled data
-      window.location.href = mailtoLink;
-      
-      // Optionally, you can reset the form and hide the modal after a slight delay
-      setTimeout(() => {
-        contactModalForm.reset();
-        hideContactModal();
-      }, 1000);
     });
+    </script>
+
+    <!-- Scan Button -->
+<button id="scan-btn" class="bg-primary hover:bg-orange-600 text-white py-2 px-6 rounded-md font-medium mb-4">
+  Scan for OWASP Top 10
+</button>
+<div id="scan-results"></div>
+
+<script>
+document.getElementById('scan-btn').addEventListener('click', async function() {
+  document.getElementById('scan-results').innerHTML = 'Scanning...';
+  const res = await fetch('http://localhost:4000/api/scan', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ startUrl })
+  });
+  const data = await res.json();
+  if (!data.results || data.results.length === 0) {
+    document.getElementById('scan-results').innerHTML = 'No vulnerabilities found.';
+  } else {
+    document.getElementById('scan-results').innerHTML = `
+      <table class="w-full">
+        <thead><tr><th>URL</th><th>Type</th><th>Payload</th></tr></thead>
+        <tbody>
+          ${data.results.map(r => `<tr><td>${r.url}</td><td>${r.type}</td><td>${r.payload}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    `;
   }
 });
 </script>
-	</body>
+  </main>
+</body>
 </html>
